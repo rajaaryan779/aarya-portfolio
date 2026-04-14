@@ -97,7 +97,7 @@ export default function About() {
             <span className="gradient-text">code</span>
           </h2>
           <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-            I'm an AI/ML engineer who loves turning complex ideas into working systems.
+            I&apos;m an AI/ML engineer who loves turning complex ideas into working systems.
             From building neural networks to designing multi-agent automation pipelines.
           </p>
         </motion.div>
@@ -114,16 +114,16 @@ export default function About() {
                 Who I Am
               </h3>
               <p className="text-slate-300 leading-relaxed mb-4">
-                I'm a B.Tech CSE student at Pimpri Chinchwad University, specializing
+                I&apos;m a B.Tech CSE student at Pimpri Chinchwad University, specializing
                 in Artificial Intelligence and Machine Learning. My work spans
                 sentiment analysis, image classification, stock price prediction,
                 and complex multi-agent automation systems.
               </p>
               <p className="text-slate-400 leading-relaxed">
-                I'm passionate about building{" "}
+                I&apos;m passionate about building{" "}
                 <span className="text-purple-400 font-medium">production-grade</span> AI
-                systems that don't just work in notebooks — they solve real problems
-                at scale. Whether that's a RAG pipeline, a Telegram bot with per-user
+                systems that don&apos;t just work in notebooks — they solve real problems
+                at scale. Whether that&apos;s a RAG pipeline, a Telegram bot with per-user
                 memory, or a multi-workflow automation suite.
               </p>
             </div>
