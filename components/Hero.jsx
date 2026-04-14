@@ -158,7 +158,7 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="text-5xl md:text-7xl font-black tracking-tight text-white mb-4 leading-[1.05]"
           >
-            Hi, I'm{" "}
+            Hi, I&apos;m{" "}
             <span className="gradient-text">Aarya Vaidya</span>
           </motion.h1>
 

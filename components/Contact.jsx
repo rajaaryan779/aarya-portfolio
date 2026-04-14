@@ -102,12 +102,12 @@ export default function Contact() {
             Contact
           </span>
           <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
-            Let's{" "}
+            Let&apos;s{" "}
             <span className="gradient-text">work together</span>
           </h2>
           <p className="text-slate-400 text-lg max-w-xl mx-auto">
             Open to internships, freelance projects, and collaborations.
-            Drop a message and I'll get back to you.
+            Drop a message and I&apos;ll get back to you.
           </p>
         </motion.div>
 
