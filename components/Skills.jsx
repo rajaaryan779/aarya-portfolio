@@ -170,7 +170,7 @@ export default function Skills() {
           </h2>
           <p className="text-slate-400 text-lg max-w-2xl mx-auto">
             From training neural networks to building multi-agent automation
-            pipelines — here's what I work with.
+            pipelines — here&apos;s what I work with.
           </p>
         </motion.div>
 
