@@ -1,10 +1,12 @@
+import dynamic from 'next/dynamic'
 import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
 import Projects from '@/components/Projects'
 import Skills from '@/components/Skills'
 import Contact from '@/components/Contact'
-import ParticleCanvas from '@/components/ParticleCanvas'
-import CursorEffect from '@/components/CursorEffect'
+
+const ParticleCanvas = dynamic(() => import('@/components/ParticleCanvas'), { ssr: false })
+const CursorEffect = dynamic(() => import('@/components/CursorEffect'), { ssr: false })
 
 export default function Home() {
   return (
