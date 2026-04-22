@@ -1,19 +1,42 @@
-import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import About from "@/components/About";
-import Projects from "@/components/Projects";
-import Skills from "@/components/Skills";
-import Contact from "@/components/Contact";
+import Navbar from '@/components/Navbar'
+import Hero from '@/components/Hero'
+import Projects from '@/components/Projects'
+import Skills from '@/components/Skills'
+import Contact from '@/components/Contact'
+import ParticleCanvas from '@/components/ParticleCanvas'
+import CursorEffect from '@/components/CursorEffect'
 
 export default function Home() {
   return (
-    <main className="relative bg-[#05050f] min-h-screen">
+    <>
+      <CursorEffect />
+      <ParticleCanvas />
       <Navbar />
-      <Hero />
-      <About />
-      <Projects />
-      <Skills />
-      <Contact />
-    </main>
-  );
+      <main style={{ position: 'relative', zIndex: 1 }}>
+        <Hero />
+        <div className="divider" />
+        <Projects />
+        <div className="divider" />
+        <Skills />
+        <div className="divider" />
+        <Contact />
+      </main>
+      <footer style={{
+        padding: '2rem 3rem',
+        borderTop: '1px solid rgba(255,255,255,0.05)',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        maxWidth: '1100px',
+        margin: '0 auto',
+      }}>
+        <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '.55rem', letterSpacing: '.12em', textTransform: 'uppercase', color: 'rgba(232,240,248,0.2)' }}>
+          © 2026 Aarya Vaidya — AI/ML Engineer
+        </span>
+        <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '.55rem', letterSpacing: '.12em', textTransform: 'uppercase', color: 'rgba(232,240,248,0.2)' }}>
+          Pune, India
+        </span>
+      </footer>
+    </>
+  )
 }
