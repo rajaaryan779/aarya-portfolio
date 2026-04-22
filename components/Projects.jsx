@@ -22,9 +22,7 @@ const projects = [
       { label: "Records Processed", value: "10K+" },
       { label: "Effort Saved", value: "60%" },
     ],
-    links: {
-      github: "https://github.com/rajaaryan779",
-    },
+    links: { github: "https://github.com/rajaaryan779" },
   },
   {
     id: 2,
@@ -43,9 +41,7 @@ const projects = [
       { label: "Auth", value: "Secure" },
       { label: "Type", value: "Web App" },
     ],
-    links: {
-      github: "https://github.com/rajaaryan779",
-    },
+    links: { github: "https://github.com/rajaaryan779" },
   },
   {
     id: 3,
@@ -64,9 +60,7 @@ const projects = [
       { label: "Architecture", value: "CNN" },
       { label: "Framework", value: "TensorFlow" },
     ],
-    links: {
-      github: "https://github.com/rajaaryan779",
-    },
+    links: { github: "https://github.com/rajaaryan779" },
   },
   {
     id: 4,
@@ -86,9 +80,46 @@ const projects = [
       { label: "Integrations", value: "10+" },
     ],
     featured: true,
-    links: {
-      github: "https://github.com/rajaaryan779",
-    },
+    links: { github: "https://github.com/rajaaryan779" },
+  },
+  {
+    id: 5,
+    title: "TradingBot",
+    subtitle: "Binance Futures Testnet Bot",
+    description:
+      "Python CLI trading bot for placing MARKET and LIMIT orders on Binance Futures Testnet (USDT-M). Features HMAC-SHA256 signed REST API calls, structured logging, input validation, and clean separation of client, orders, and CLI layers.",
+    tags: ["Python", "REST API", "argparse", "HMAC-SHA256", "Binance API"],
+    gradient: "from-yellow-500 via-orange-500 to-red-500",
+    glow: "shadow-yellow-500/40",
+    hoverGlow: "hover:shadow-yellow-500/60",
+    accent: "#EAB308",
+    icon: "📈",
+    metrics: [
+      { label: "Order Types", value: "2" },
+      { label: "API", value: "Binance" },
+      { label: "Auth", value: "HMAC-SHA256" },
+    ],
+    links: { github: "https://github.com/rajaaryan779/trading_bot" },
+  },
+  {
+    id: 6,
+    title: "AutoStream Agent",
+    subtitle: "Social-to-Lead AI Agent",
+    description:
+      "Conversational AI agent that converts social media interactions into qualified business leads. Built with LangGraph for state management across 6 turns, RAG from local knowledge base, intent detection (greeting / inquiry / high-intent), and automatic lead capture tool execution.",
+    tags: ["LangGraph", "Groq", "LLaMA 3.3", "RAG", "Python", "Intent Detection"],
+    gradient: "from-cyan-500 via-blue-500 to-violet-600",
+    glow: "shadow-cyan-500/40",
+    hoverGlow: "hover:shadow-cyan-500/60",
+    accent: "#06B6D4",
+    icon: "🤖",
+    metrics: [
+      { label: "Framework", value: "LangGraph" },
+      { label: "LLM", value: "LLaMA 3.3" },
+      { label: "Pipeline", value: "RAG" },
+    ],
+    featured: true,
+    links: { github: "https://github.com/rajaaryan779/autostream_agent" },
   },
 ];
 
@@ -181,7 +212,7 @@ function ProjectCard({ project, index }) {
           </div>
         </div>
 
-        {/* Metrics (visible on featured, or on all) */}
+        {/* Metrics */}
         <div
           className={`${
             project.featured
@@ -192,9 +223,7 @@ function ProjectCard({ project, index }) {
           {project.metrics.map((metric) => (
             <div
               key={metric.label}
-              className={`glass-card p-3 text-center ${
-                project.featured ? "py-4" : ""
-              }`}
+              className={`glass-card p-3 text-center ${project.featured ? "py-4" : ""}`}
             >
               <div
                 className={`font-black text-lg bg-gradient-to-r ${project.gradient} bg-clip-text text-transparent`}
@@ -215,11 +244,9 @@ export default function Projects() {
 
   return (
     <section id="projects" className="section-padding relative">
-      {/* BG accent */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#05050f] via-[#080814] to-[#05050f] pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Header */}
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 30 }}
@@ -231,8 +258,7 @@ export default function Projects() {
             Projects
           </span>
           <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
-            Things I&apos;ve{" "}
-            <span className="gradient-text">built</span>
+            Things I&apos;ve <span className="gradient-text">built</span>
           </h2>
           <p className="text-slate-400 text-lg max-w-2xl mx-auto">
             From NLP tools to multi-agent automation suites — production-ready
@@ -240,14 +266,12 @@ export default function Projects() {
           </p>
         </motion.div>
 
-        {/* Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {projects.map((project, i) => (
             <ProjectCard key={project.id} project={project} index={i} />
           ))}
         </div>
 
-        {/* GitHub CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
