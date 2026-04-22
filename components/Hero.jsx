@@ -1,9 +1,9 @@
 'use client'
 import { useEffect, useRef } from 'react'
 
-function useCounter(ref, target, duration = 1500) {
+function useCounter(elRef, target, duration = 1500) {
   useEffect(() => {
-    const el = ref.current
+    const el = elRef.current
     if (!el) return
     const obs = new IntersectionObserver(([entry]) => {
       if (!entry.isIntersecting) return
@@ -20,6 +20,7 @@ function useCounter(ref, target, duration = 1500) {
     }, { threshold: .1 })
     obs.observe(el)
     return () => obs.disconnect()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 }
 
@@ -67,7 +68,7 @@ export default function Hero() {
           color: 'rgba(232,240,248,0.5)',
           marginBottom: '2.5rem',
         }}>
-          // B.Tech CSE · AI & ML Specialization · Pune, India
+          {String.fromCharCode(47, 47)} B.Tech CSE · AI &amp; ML Specialization · Pune, India
         </p>
 
         <p className="fade-up-4" style={{
@@ -86,19 +87,18 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Stats */}
       <div className="fade-up-6" style={{
         position: 'absolute',
         bottom: '4rem', right: '3rem',
         display: 'flex', gap: '3rem',
       }}>
         {[
-          { ref: c1, label: 'Projects' },
-          { ref: c2, label: 'Workflows' },
-          { ref: c3, label: '% Accuracy' },
-        ].map(({ ref, label }) => (
+          { elRef: c1, label: 'Projects' },
+          { elRef: c2, label: 'Workflows' },
+          { elRef: c3, label: '% Accuracy' },
+        ].map(({ elRef, label }) => (
           <div key={label}>
-            <div ref={ref} style={{
+            <div ref={elRef} style={{
               fontFamily: "'Bebas Neue',sans-serif",
               fontSize: '3rem', color: '#00ffe0', lineHeight: 1,
             }}>0</div>
