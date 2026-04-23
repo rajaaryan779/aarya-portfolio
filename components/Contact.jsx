@@ -1,66 +1,71 @@
 'use client'
+import { useState } from 'react'
+
 export default function Contact() {
+  const [formState, setFormState] = useState({ name: '', email: '', msg: '' })
+  const [submitting, setSubmitting] = useState(false)
+  const [result, setResult] = useState(null)
+
+  const submit = (e) => {
+    e.preventDefault()
+    setSubmitting(true)
+    setTimeout(() => {
+      setSubmitting(false)
+      setResult('ok')
+      setFormState({ name: '', email: '', msg: '' })
+      setTimeout(() => setResult(null), 4000)
+    }, 1500)
+  }
+
   return (
-    <section id="contact" className="section-wrap">
-      <div className="section-tag">Contact</div>
-      <h2 className="section-title">LET&apos;S WORK<br />TOGETHER</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'start' }}>
-        <div>
-          <a href="mailto:aaryasharadvaidya.10@gmail.com" style={{
-            fontFamily: "'Bebas Neue',sans-serif",
-            fontSize: 'clamp(1.5rem,3vw,2.5rem)',
-            letterSpacing: '.04em',
-            color: '#00ffe0',
-            textDecoration: 'none',
-            display: 'block',
-            marginBottom: '2rem',
-            lineHeight: 1.2,
-            transition: 'opacity .2s',
-            cursor: 'none',
-          }}
-          onMouseEnter={e => e.target.style.opacity = '.7'}
-          onMouseLeave={e => e.target.style.opacity = '1'}
-          >
+    <section className="sec-wrap" id="contact">
+      <div className="sec-tag reveal">Contact</div>
+      <h2 className="sec-title reveal">LET&apos;S WORK<br />TOGETHER</h2>
+      <div className="contact-grid">
+        <div className="reveal-l">
+          <a href="mailto:aaryasharadvaidya.10@gmail.com" className="contact-email">
             aaryasharadvaidya<br />.10@gmail.com
           </a>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div className="contact-links">
             {[
               { label: 'GitHub — rajaaryan779', href: 'https://github.com/rajaaryan779' },
               { label: 'LinkedIn — aarya-vaidya', href: 'https://linkedin.com/in/aarya-vaidya' },
               { label: '+91 8149904590', href: 'tel:+918149904590' },
               { label: 'Pune, Maharashtra, India', href: '#' },
-            ].map(link => (
-              <a key={link.label} href={link.href}
-                target={link.href.startsWith('http') ? '_blank' : undefined}
-                rel="noopener noreferrer"
-                style={{
-                  fontFamily: "'Space Mono',monospace",
-                  fontSize: '.65rem', letterSpacing: '.12em',
-                  textTransform: 'uppercase',
-                  color: 'rgba(232,240,248,.4)',
-                  textDecoration: 'none',
-                  display: 'flex', alignItems: 'center', gap: '.8rem',
-                  transition: 'color .2s',
-                  cursor: 'none',
-                }}
-                onMouseEnter={e => e.currentTarget.style.color = '#00ffe0'}
-                onMouseLeave={e => e.currentTarget.style.color = 'rgba(232,240,248,.4)'}
-              >
-                <span style={{ color: '#00ffe0' }}>→</span>
-                {link.label}
+            ].map(l => (
+              <a key={l.label} href={l.href} target={l.href.startsWith('http') ? '_blank' : undefined}
+                rel="noopener noreferrer" className="contact-link">
+                {l.label}
               </a>
             ))}
           </div>
-        </div>
 
-        <div style={{
-          fontFamily: "'Bebas Neue',sans-serif",
-          fontSize: 'clamp(3rem,6vw,5.5rem)',
-          lineHeight: '.9', letterSpacing: '.04em',
-          color: 'rgba(255,255,255,.05)',
-        }}>
-          OPEN<br />TO<br />WORK
+          <form className="contact-form" onSubmit={submit}>
+            <div className="form-group">
+              <input className="form-input" type="text" id="fname" placeholder=" "
+                value={formState.name} onChange={e => setFormState(s => ({ ...s, name: e.target.value }))} required />
+              <label className="form-label" htmlFor="fname">Your Name</label>
+            </div>
+            <div className="form-group">
+              <input className="form-input" type="email" id="femail" placeholder=" "
+                value={formState.email} onChange={e => setFormState(s => ({ ...s, email: e.target.value }))} required />
+              <label className="form-label" htmlFor="femail">Email Address</label>
+            </div>
+            <div className="form-group">
+              <textarea className="form-input" id="fmsg" placeholder=" "
+                value={formState.msg} onChange={e => setFormState(s => ({ ...s, msg: e.target.value }))} required />
+              <label className="form-label" htmlFor="fmsg">Message</label>
+            </div>
+            <button type="submit" className="form-submit">
+              <span className="form-submit-inner">
+                {submitting ? 'Sending...' : 'Send Message →'}
+              </span>
+            </button>
+            {result === 'ok' && <div className="form-msg ok">✓ Message sent! Aarya will reply soon.</div>}
+          </form>
+        </div>
+        <div className="reveal">
+          <div className="open-text">OPEN<br />TO<br />WORK</div>
         </div>
       </div>
     </section>

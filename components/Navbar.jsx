@@ -1,49 +1,43 @@
 'use client'
-import Link from 'next/link'
 import { useState, useEffect } from 'react'
 
-export default function Navbar() {
+export default function Navbar({ onTerminalOpen }) {
   const [scrolled, setScrolled] = useState(false)
+  const [theme, setTheme] = useState('dark')
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
+    const onScroll = () => setScrolled(window.scrollY > 40)
     window.addEventListener('scroll', onScroll)
+    const saved = localStorage.getItem('av_theme') || 'dark'
+    setTheme(saved)
+    document.documentElement.dataset.theme = saved
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  const toggleTheme = () => {
+    const next = theme === 'dark' ? 'light' : 'dark'
+    setTheme(next)
+    document.documentElement.dataset.theme = next
+    localStorage.setItem('av_theme', next)
+  }
+
+  const openTerminal = () => window.dispatchEvent(new CustomEvent('openTerminal'))
+
   return (
-    <nav style={{
-      position: 'fixed', top: 0, left: 0, right: 0,
-      zIndex: 100,
-      padding: '1.2rem 3rem',
-      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-      borderBottom: '1px solid rgba(0,255,224,0.08)',
-      background: 'rgba(3,5,7,0.7)',
-      backdropFilter: 'blur(20px)',
-      transition: 'all .3s',
-    }}>
-      <div style={{
-        fontFamily: "'Bebas Neue',sans-serif",
-        fontSize: '1.4rem',
-        letterSpacing: '.12em',
-        color: '#00ffe0',
-      }}>AV</div>
-      <div style={{ display: 'flex', gap: '2.5rem' }}>
-        {['About', 'Projects', 'Skills', 'Contact'].map(item => (
-          <a key={item} href={`#${item.toLowerCase()}`} style={{
-            fontFamily: "'Space Mono',monospace",
-            fontSize: '.65rem',
-            letterSpacing: '.15em',
-            textTransform: 'uppercase',
-            color: 'rgba(232,240,248,0.4)',
-            textDecoration: 'none',
-            transition: 'color .2s',
-            cursor: 'none',
-          }}
-          onMouseEnter={e => e.target.style.color = '#00ffe0'}
-          onMouseLeave={e => e.target.style.color = 'rgba(232,240,248,0.4)'}
-          >{item}</a>
+    <nav className={scrolled ? 'scrolled' : ''}>
+      <a href="#about" className="nav-logo">AV</a>
+      <div className="nav-links">
+        {['About', 'Projects', 'Journey', 'Blog', 'Skills', 'Contact'].map(item => (
+          <a key={item} href={`#${item.toLowerCase()}`} className="nav-link">{item}</a>
         ))}
+      </div>
+      <div className="nav-actions">
+        <button className="icon-btn" onClick={toggleTheme} title="Toggle theme">
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
+        <button className="term-btn" onClick={openTerminal}>
+          <span className="term-btn-inner">[ ` Terminal ]</span>
+        </button>
       </div>
     </nav>
   )

@@ -1,114 +1,136 @@
 'use client'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-function useCounter(elRef, target, duration = 1500) {
+function useCounter(target, start = false, duration = 1600) {
+  const [val, setVal] = useState(0)
   useEffect(() => {
-    const el = elRef.current
-    if (!el) return
-    const obs = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) return
-      let start = null
-      const step = (ts) => {
-        if (!start) start = ts
-        const p = Math.min((ts - start) / duration, 1)
-        el.textContent = Math.floor(p * target)
-        if (p < 1) requestAnimationFrame(step)
-        else el.textContent = target
-      }
-      requestAnimationFrame(step)
-      obs.disconnect()
-    }, { threshold: .1 })
-    obs.observe(el)
-    return () => obs.disconnect()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    if (!start) return
+    let s = null
+    const step = (ts) => {
+      if (!s) s = ts
+      const p = Math.min((ts - s) / duration, 1)
+      setVal(Math.floor(p * target))
+      if (p < 1) requestAnimationFrame(step)
+      else setVal(target)
+    }
+    requestAnimationFrame(step)
+  }, [start, target, duration])
+  return val
+}
+
+const CHARS = '!@#$%^&*_+-=[]{}|<>?ABCDEFGHIJKLMNabcdefghijklmn0123456789'
+
+function useScramble(final, trigger, duration = 900) {
+  const [text, setText] = useState(final)
+  useEffect(() => {
+    if (!trigger) return
+    let frame = 0
+    const total = Math.floor(duration / 30)
+    const iv = setInterval(() => {
+      setText(final.split('').map((c, i) =>
+        frame / total > i / final.length ? c : CHARS[Math.floor(Math.random() * CHARS.length)]
+      ).join(''))
+      if (++frame > total) { setText(final); clearInterval(iv) }
+    }, 30)
+    return () => clearInterval(iv)
+  }, [trigger, final, duration])
+  return text
 }
 
 export default function Hero() {
-  const c1 = useRef(), c2 = useRef(), c3 = useRef()
-  useCounter(c1, 6)
-  useCounter(c2, 19)
-  useCounter(c3, 85)
+  const [started, setStarted] = useState(false)
+  const [ghData, setGhData] = useState({ repos: '--', stars: '--', followers: '--' })
+  const [dlCount, setDlCount] = useState(42)
+
+  const p1 = useCounter(6, started)
+  const p2 = useCounter(19, started)
+  const p3 = useCounter(85, started)
+  const scrambled = useScramble('// B.Tech CSE · AI & ML · Pune, India', started)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setStarted(true), 1800)
+    const dl = parseInt(localStorage.getItem('av_downloads') || '42')
+    setDlCount(dl)
+
+    fetch('https://api.github.com/users/rajaaryan779')
+      .then(r => r.json())
+      .then(d => {
+        fetch('https://api.github.com/users/rajaaryan779/repos?per_page=100')
+          .then(r => r.json())
+          .then(repos => {
+            const stars = Array.isArray(repos) ? repos.reduce((a, r) => a + (r.stargazers_count || 0), 0) : 0
+            setGhData({ repos: d.public_repos || 15, stars, followers: d.followers || 0 })
+          }).catch(() => setGhData({ repos: d.public_repos || 15, stars: 0, followers: d.followers || 0 }))
+      }).catch(() => setGhData({ repos: 15, stars: 0, followers: 0 }))
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  const downloadResume = (e) => {
+    e.preventDefault()
+    const next = dlCount + 1
+    setDlCount(next)
+    localStorage.setItem('av_downloads', next)
+    window.open('https://drive.google.com/file/d/1dLuNQwhW41UpeBeojzT7JC5lhY6KB__S/view', '_blank')
+  }
 
   return (
-    <section id="about" style={{
-      minHeight: '100vh',
-      display: 'flex', alignItems: 'center',
-      padding: '8rem 3rem 4rem',
-      position: 'relative',
-    }}>
-      <div style={{ maxWidth: '1100px', width: '100%', margin: '0 auto' }}>
+    <section className="hero" id="about">
+      <span className="float-tag ft1">LangGraph Agent</span>
+      <span className="float-tag ft2">RAG Pipeline</span>
+      <span className="float-tag ft3">Binance API</span>
+      <span className="float-tag ft4">Groq LLaMA 3.3</span>
 
-        <div className="fade-up-1" style={{
-          fontFamily: "'Space Mono',monospace",
-          fontSize: '.65rem', letterSpacing: '.3em',
-          textTransform: 'uppercase', color: '#00ffe0',
-          marginBottom: '1.5rem',
-          display: 'flex', alignItems: 'center', gap: '.8rem',
-        }}>
-          <span style={{ display: 'block', width: '32px', height: '1px', background: '#00ffe0' }} />
-          Available for opportunities
+      <div className="hero-inner">
+        <div className="hero-eyebrow">
+          <span className="eyebrow-dot" />
+          <span className={`eyebrow-text ${started ? 'show' : ''}`}>Available for opportunities</span>
         </div>
 
-        <h1 className="fade-up-2" style={{
-          fontFamily: "'Bebas Neue',sans-serif",
-          fontSize: 'clamp(5rem,12vw,11rem)',
-          lineHeight: '.9',
-          letterSpacing: '.03em',
-          marginBottom: '1rem',
-        }}>
-          <span style={{ color: '#e8f0f8' }}>AARYA</span><br />
-          <span style={{ WebkitTextStroke: '1px rgba(232,240,248,0.2)', color: 'transparent' }}>VAIDYA</span><br />
-          <span style={{ color: '#00ffe0' }}>AI/ML</span>
-        </h1>
+        <span className="glitch" data-text="AARYA" style={{ color: '#e8f0f8' }}>AARYA</span>
+        <span className="glitch outline-t" data-text="VAIDYA">VAIDYA</span>
+        <span className="glitch acc-t" data-text="AI/ML">AI/ML</span>
 
-        <p className="fade-up-3" style={{
-          fontFamily: "'Space Mono',monospace",
-          fontSize: '.85rem', letterSpacing: '.1em',
-          color: 'rgba(232,240,248,0.5)',
-          marginBottom: '2.5rem',
-        }}>
-          {String.fromCharCode(47, 47)} B.Tech CSE · AI &amp; ML Specialization · Pune, India
-        </p>
-
-        <p className="fade-up-4" style={{
-          fontSize: '1rem',
-          color: 'rgba(232,240,248,0.6)',
-          lineHeight: '1.8',
-          maxWidth: '480px',
-          marginBottom: '3rem',
-        }}>
+        <p className="scramble-txt" style={{ opacity: started ? 1 : 0 }}>{scrambled}</p>
+        <p className="hero-desc" style={{ opacity: started ? 1 : 0 }}>
           Building production-grade AI systems that don&apos;t just work in notebooks — they solve real problems at scale.
         </p>
 
-        <div className="fade-up-5" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <a href="#projects" className="btn-primary">View Projects</a>
-          <a href="#contact" className="btn-ghost">Contact Me →</a>
+        <div className="hero-ctas" style={{ opacity: started ? 1 : 0 }}>
+          <a href="#projects" className="btn-p"><span className="btn-p-inner">View Projects</span></a>
+          <a href="#contact" className="btn-g">Contact Me →</a>
+          <a href="#" className="resume-btn" onClick={downloadResume}>
+            <span className="resume-icon">⬇</span>
+            Resume
+            <span className="dl-count">({dlCount} downloads)</span>
+          </a>
+        </div>
+
+        {/* GitHub Stats */}
+        <div className="gh-stats" style={{ opacity: started ? 1 : 0 }}>
+          {[
+            { num: ghData.repos, label: 'Public Repos' },
+            { num: ghData.stars, label: 'GitHub Stars' },
+            { num: ghData.followers, label: 'Followers' },
+            { num: '6', label: 'Projects Live' },
+          ].map(({ num, label }) => (
+            <div className="gh-stat" key={label}>
+              <div className="gh-num">{num}</div>
+              <div className="gh-lbl">{label}</div>
+            </div>
+          ))}
         </div>
       </div>
 
-      <div className="fade-up-6" style={{
-        position: 'absolute',
-        bottom: '4rem', right: '3rem',
-        display: 'flex', gap: '3rem',
-      }}>
+      <div className="hero-stats" style={{ opacity: started ? 1 : 0 }}>
         {[
-          { elRef: c1, label: 'Projects' },
-          { elRef: c2, label: 'Workflows' },
-          { elRef: c3, label: '% Accuracy' },
-        ].map(({ elRef, label }) => (
+          { val: p1, label: 'Projects' },
+          { val: p2, label: 'Workflows' },
+          { val: p3, label: '% Accuracy' },
+        ].map(({ val, label }) => (
           <div key={label}>
-            <div ref={elRef} style={{
-              fontFamily: "'Bebas Neue',sans-serif",
-              fontSize: '3rem', color: '#00ffe0', lineHeight: 1,
-            }}>0</div>
-            <div style={{
-              fontFamily: "'Space Mono',monospace",
-              fontSize: '.6rem', letterSpacing: '.12em',
-              textTransform: 'uppercase',
-              color: 'rgba(232,240,248,0.35)',
-              marginTop: '.2rem',
-            }}>{label}</div>
+            <div className="stat-n">{val}</div>
+            <div className="stat-l">{label}</div>
           </div>
         ))}
       </div>
