@@ -1,3 +1,4 @@
+'use client'
 export default function Contact() {
   return (
     <section id="contact" className="section-wrap">
@@ -30,7 +31,8 @@ export default function Contact() {
               { label: '+91 8149904590', href: 'tel:+918149904590' },
               { label: 'Pune, Maharashtra, India', href: '#' },
             ].map(link => (
-              <a key={link.label} href={link.href} target={link.href.startsWith('http') ? '_blank' : undefined}
+              <a key={link.label} href={link.href}
+                target={link.href.startsWith('http') ? '_blank' : undefined}
                 rel="noopener noreferrer"
                 style={{
                   fontFamily: "'Space Mono',monospace",
