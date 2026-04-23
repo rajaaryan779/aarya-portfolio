@@ -7,21 +7,23 @@ import Blog from '@/components/Blog'
 import Skills from '@/components/Skills'
 import Contact from '@/components/Contact'
 
-const Aurora      = dynamic(() => import('@/components/Aurora'),       { ssr: false })
-const Loader      = dynamic(() => import('@/components/Loader'),       { ssr: false })
-const Cursor      = dynamic(() => import('@/components/Cursor'),       { ssr: false })
-const Particles   = dynamic(() => import('@/components/Particles'),    { ssr: false })
-const Terminal    = dynamic(() => import('@/components/Terminal'),      { ssr: false })
-const MusicPlayer = dynamic(() => import('@/components/MusicPlayer'),  { ssr: false })
-const ChatBot     = dynamic(() => import('@/components/ChatBot'),       { ssr: false })
-const EasterEgg   = dynamic(() => import('@/components/EasterEgg'),    { ssr: false })
-const VisitorBadge= dynamic(() => import('@/components/VisitorBadge'), { ssr: false })
-const Marquee     = dynamic(() => import('@/components/Marquee'),      { ssr: false })
+const Aurora       = dynamic(() => import('@/components/Aurora'),        { ssr: false })
+const Loader       = dynamic(() => import('@/components/Loader'),        { ssr: false })
+const Cursor       = dynamic(() => import('@/components/Cursor'),        { ssr: false })
+const Particles    = dynamic(() => import('@/components/Particles'),     { ssr: false })
+const Terminal     = dynamic(() => import('@/components/Terminal'),      { ssr: false })
+const MusicPlayer  = dynamic(() => import('@/components/MusicPlayer'),   { ssr: false })
+const ChatBot      = dynamic(() => import('@/components/ChatBot'),       { ssr: false })
+const EasterEgg    = dynamic(() => import('@/components/EasterEgg'),     { ssr: false })
+const VisitorBadge = dynamic(() => import('@/components/VisitorBadge'),  { ssr: false })
+const Marquee      = dynamic(() => import('@/components/Marquee'),       { ssr: false })
+const VoiceWelcome = dynamic(() => import('@/components/VoiceWelcome'),  { ssr: false })
 
 export default function Home() {
   return (
     <>
       <Loader />
+      <VoiceWelcome />
       <Cursor />
       <Aurora />
       <Particles />
