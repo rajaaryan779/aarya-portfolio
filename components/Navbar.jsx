@@ -1,43 +1,28 @@
 'use client'
 import { useState, useEffect } from 'react'
 
-export default function Navbar({ onTerminalOpen }) {
-  const [scrolled, setScrolled] = useState(false)
+export default function Navbar() {
   const [theme, setTheme] = useState('dark')
-
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
-    window.addEventListener('scroll', onScroll)
     const saved = localStorage.getItem('av_theme') || 'dark'
     setTheme(saved)
-    document.documentElement.dataset.theme = saved
-    return () => window.removeEventListener('scroll', onScroll)
   }, [])
-
   const toggleTheme = () => {
     const next = theme === 'dark' ? 'light' : 'dark'
-    setTheme(next)
-    document.documentElement.dataset.theme = next
-    localStorage.setItem('av_theme', next)
+    setTheme(next); localStorage.setItem('av_theme', next)
   }
-
-  const openTerminal = () => window.dispatchEvent(new CustomEvent('openTerminal'))
-
+  const openTerm = () => window.dispatchEvent(new CustomEvent('openTerm'))
   return (
-    <nav className={scrolled ? 'scrolled' : ''}>
-      <a href="#about" className="nav-logo">AV</a>
-      <div className="nav-links">
-        {['About', 'Projects', 'Journey', 'Blog', 'Skills', 'Contact'].map(item => (
-          <a key={item} href={`#${item.toLowerCase()}`} className="nav-link">{item}</a>
+    <nav id="nav">
+      <a href="#about" className="n-logo">AV</a>
+      <div className="n-links">
+        {['About','Projects','Journey','Blog','Skills','Contact'].map(s => (
+          <a key={s} href={`#${s.toLowerCase()}`} className="n-link">{s}</a>
         ))}
       </div>
-      <div className="nav-actions">
-        <button className="icon-btn" onClick={toggleTheme} title="Toggle theme">
-          {theme === 'dark' ? '☀️' : '🌙'}
-        </button>
-        <button className="term-btn" onClick={openTerminal}>
-          <span className="term-btn-inner">[ ` Terminal ]</span>
-        </button>
+      <div className="n-actions">
+        <button className="n-icon" onClick={toggleTheme}>{theme==='dark'?'☀️':'🌙'}</button>
+        <button className="n-btn" onClick={openTerm}><span className="n-btn-t">[ ` Terminal ]</span></button>
       </div>
     </nav>
   )

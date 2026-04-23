@@ -1,52 +1,23 @@
 'use client'
 import { useState, useEffect } from 'react'
-
-const tracks = [
-  { title: 'Lo-fi Study Beats', artist: 'Chill Mode' },
-  { title: 'Rainy Cafe Vibes', artist: 'Ambient Studio' },
-  { title: 'Deep Focus Flow', artist: 'Productivity Mix' },
-  { title: 'Midnight Coding', artist: 'Dev Lounge' },
-]
-
-const VIZ_DELAYS = [0, .1, .2, .3, .4]
-const VIZ_HEIGHTS = [4, 8, 12, 6, 10]
-
+const TRK=[{t:'Lo-fi Study Beats',a:'Chill Mode'},{t:'Rainy Cafe Vibes',a:'Ambient'},{t:'Deep Focus Flow',a:'Dev Mode'},{t:'Midnight Coding',a:'Lo-fi Lab'}]
+const HH=[4,8,12,6,10]
 export default function MusicPlayer() {
-  const [cur, setCur] = useState(0)
-  const [playing, setPlaying] = useState(false)
-  const [prog, setProg] = useState(30)
-
-  useEffect(() => {
-    if (!playing) return
-    const iv = setInterval(() => setProg(p => (p + .5) % 100), 500)
-    return () => clearInterval(iv)
-  }, [playing])
-
-  const next = () => { setCur(c => (c + 1) % tracks.length); setProg(0) }
-  const prev = () => { setCur(c => (c - 1 + tracks.length) % tracks.length); setProg(0) }
-
+  const [c,setC]=useState(0);const [pl,setPl]=useState(false);const [pg,setPg]=useState(25)
+  useEffect(()=>{if(!pl)return;const iv=setInterval(()=>setPg(p=>(p+.4)%100),500);return()=>clearInterval(iv)},[pl])
   return (
-    <div className="music-player">
-      <div className="music-viz">
-        {VIZ_HEIGHTS.map((h, i) => (
-          <div key={i} className="viz-bar" style={{
-            height: h + 'px',
-            animation: playing ? `visPulse 1s ${VIZ_DELAYS[i]}s ease-in-out infinite` : 'none',
-          }} />
-        ))}
-        <style>{`@keyframes visPulse{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.25)}}`}</style>
+    <div className="mp">
+      <div className="mp-viz">{HH.map((h,i)=>(<div key={i} className="mp-bar" style={{height:h+'px',animation:pl?`vizP 1s ${i*.1}s ease-in-out infinite`:'none'}}/>))}</div>
+      <style>{`@keyframes vizP{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.2)}}`}</style>
+      <div className="mp-inf">
+        <div className="mp-ti">{TRK[c].t}</div>
+        <div className="mp-ar">🎵 {TRK[c].a}</div>
+        <div className="mp-pb"><div className="mp-pf" style={{width:pg+'%'}}/></div>
       </div>
-      <div className="music-info">
-        <div className="music-title">{tracks[cur].title}</div>
-        <div className="music-artist">🎵 {tracks[cur].artist}</div>
-        <div className="music-bar">
-          <div className="music-progress" style={{ width: prog + '%' }} />
-        </div>
-      </div>
-      <div className="music-controls">
-        <button className="mctrl" onClick={prev}>⏮</button>
-        <button className="mctrl" onClick={() => setPlaying(p => !p)}>{playing ? '⏸' : '▶'}</button>
-        <button className="mctrl" onClick={next}>⏭</button>
+      <div className="mp-ct">
+        <button className="mp-c" onClick={()=>{setC(p=>(p-1+TRK.length)%TRK.length);setPg(0)}}>⏮</button>
+        <button className="mp-c" onClick={()=>setPl(p=>!p)}>{pl?'⏸':'▶'}</button>
+        <button className="mp-c" onClick={()=>{setC(p=>(p+1)%TRK.length);setPg(0)}}>⏭</button>
       </div>
     </div>
   )

@@ -1,120 +1,105 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
-const projects = [
-  { id: 1, num: '01', icon: '⚡', name: 'AutoStream Agent', sub: 'Social-to-Lead AI Agent', accent: '#00ffe0', featured: true,
-    desc: 'Conversational AI agent converting social interactions into qualified leads. LangGraph state machine across 6 turns, RAG from local knowledge base, intent detection, and automatic lead capture tool execution.',
-    tags: ['LangGraph', 'Groq', 'LLaMA 3.3', 'RAG', 'Python', 'Intent Detection'],
-    metrics: [{ val: 'RAG', lbl: 'Pipeline' }, { val: '6', lbl: 'Turn Memory' }, { val: 'LLM', lbl: 'Powered' }],
-    github: 'https://github.com/rajaaryan779/autostream_agent' },
-  { id: 2, num: '02', icon: '📈', name: 'TradingBot', sub: 'Binance Futures Testnet', accent: '#ffb800',
-    desc: 'Python CLI trading bot for MARKET and LIMIT orders on Binance Futures Testnet. HMAC-SHA256 signed REST calls, structured logging, clean architecture.',
-    tags: ['Python', 'REST API', 'HMAC-SHA256', 'argparse'],
-    metrics: [{ val: '2', lbl: 'Order Types' }, { val: 'Live', lbl: 'Testnet' }],
-    github: 'https://github.com/rajaaryan779/trading_bot' },
-  { id: 3, num: '03', icon: '🧠', name: 'FlowMind', sub: 'AI Automation Suite', accent: '#ff4dff',
-    desc: '19 production-grade workflows. Multi-agent bots with per-user memory, RAG pipeline (Google Drive → Pinecone → GPT-4o), voice transcription via Whisper.',
-    tags: ['n8n', 'GPT-4o', 'LangChain', 'Pinecone', 'Whisper'],
-    metrics: [{ val: '19', lbl: 'Workflows' }, { val: '10+', lbl: 'Integrations' }],
-    github: 'https://github.com/rajaaryan779' },
-  { id: 4, num: '04', icon: '🔬', name: 'SentimentIQ', sub: 'NLP Analysis System', accent: '#7b61ff',
-    desc: '85%+ accuracy on 10,000+ records. Automated sentiment pipeline cutting manual effort by 60%. Interactive dashboard visualizations.',
-    tags: ['Python', 'NLTK', 'VADER', 'Flask', 'NLP'],
-    metrics: [{ val: '85%+', lbl: 'Accuracy' }, { val: '60%', lbl: 'Effort Saved' }],
-    github: 'https://github.com/rajaaryan779' },
+const PROJECTS = [
+  { id:1, num:'01', icon:'⚡', name:'AutoStream Agent', sub:'Social-to-Lead AI Agent', accent:'#6366f1', wide:true,
+    desc:'Conversational AI agent converting social interactions into qualified leads. LangGraph state machine across 6 turns, RAG from local knowledge base, intent detection, and automatic lead capture tool execution.',
+    tags:['LangGraph','Groq','LLaMA 3.3','RAG','Python','Intent Detection'],
+    metrics:[{v:'RAG',l:'Pipeline'},{v:'6',l:'Turn Memory'},{v:'LLM',l:'Powered'}],
+    github:'https://github.com/rajaaryan779/autostream_agent' },
+  { id:2, num:'02', icon:'📈', name:'TradingBot', sub:'Binance Futures Testnet', accent:'#f59e0b',
+    desc:'Python CLI trading bot for MARKET and LIMIT orders. HMAC-SHA256 signed REST calls, structured logging, clean architecture.',
+    tags:['Python','REST API','HMAC-SHA256','argparse'],
+    metrics:[{v:'2',l:'Order Types'},{v:'Live',l:'Testnet'}],
+    github:'https://github.com/rajaaryan779/trading_bot' },
+  { id:3, num:'03', icon:'🧠', name:'FlowMind', sub:'AI Automation Suite', accent:'#ec4899',
+    desc:'19 production-grade workflows. Multi-agent bots with per-user memory, RAG pipeline (Google Drive → Pinecone → GPT-4o), Whisper voice transcription.',
+    tags:['n8n','GPT-4o','LangChain','Pinecone','Whisper'],
+    metrics:[{v:'19',l:'Workflows'},{v:'10+',l:'Integrations'}],
+    github:'https://github.com/rajaaryan779' },
+  { id:4, num:'04', icon:'🔬', name:'SentimentIQ', sub:'NLP Analysis System', accent:'#06b6d4',
+    desc:'85%+ accuracy on 10,000+ records. Automated sentiment pipeline cutting manual effort by 60%. Interactive dashboards.',
+    tags:['Python','NLTK','VADER','Flask','NLP'],
+    metrics:[{v:'85%+',l:'Accuracy'},{v:'60%',l:'Effort Saved'}],
+    github:'https://github.com/rajaaryan779' },
 ]
 
-function useReveal() {
-  const ref = useRef()
-  const [visible, setVisible] = useState(false)
+function useRV(threshold=.08) {
+  const ref = useRef(); const [vis,setVis] = useState(false)
   useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect() } }, { threshold: .08 })
-    if (ref.current) obs.observe(ref.current)
-    return () => obs.disconnect()
-  }, [])
-  return [ref, visible]
+    const obs = new IntersectionObserver(([e])=>{ if(e.isIntersecting){setVis(true);obs.disconnect()} },{threshold})
+    if(ref.current)obs.observe(ref.current)
+    return ()=>obs.disconnect()
+  },[threshold])
+  return [ref,vis]
 }
 
-function ProjectCard({ p, index }) {
+function ProjCard({ p, i }) {
+  const [ref,vis] = useRV()
   const cardRef = useRef()
-  const [ref, visible] = useReveal()
-
-  const onMouseMove = (e) => {
+  const onMove = e => {
     const r = cardRef.current.getBoundingClientRect()
-    const x = ((e.clientX - r.left) / r.width - .5) * 12
-    const y = -((e.clientY - r.top) / r.height - .5) * 12
+    const x = ((e.clientX-r.left)/r.width-.5)*10
+    const y = -((e.clientY-r.top)/r.height-.5)*10
     cardRef.current.style.transform = `translateY(-6px) rotateY(${x}deg) rotateX(${y}deg)`
-    cardRef.current.style.boxShadow = `0 24px 60px rgba(0,0,0,.4), 0 0 30px ${p.accent}15`
-    cardRef.current.style.borderColor = `${p.accent}25`
+    cardRef.current.style.boxShadow = `0 24px 60px rgba(0,0,0,.5), 0 0 40px ${p.accent}12`
   }
-  const onMouseLeave = () => {
-    cardRef.current.style.transform = ''
-    cardRef.current.style.boxShadow = ''
-    cardRef.current.style.borderColor = ''
-  }
+  const onLeave = () => { cardRef.current.style.transform=''; cardRef.current.style.boxShadow='' }
 
   return (
-    <div
-      ref={ref}
-      className={`${p.featured ? 'reveal-s' : 'reveal'} ${visible ? 'v' : ''}`}
-      style={{ transitionDelay: `${index * .1}s`, gridColumn: p.featured ? 'span 2' : undefined }}
-    >
-      <div
-        ref={cardRef}
-        className={`proj-card ${p.featured ? 'featured' : ''}`}
-        style={{ '--ac': p.accent }}
-        onMouseMove={onMouseMove}
-        onMouseLeave={onMouseLeave}
-      >
-        <style>{`.proj-card[style*="${p.accent}"]::after { background: ${p.accent}; }`}</style>
-        <div style={p.featured ? undefined : undefined}>
-          <div className="proj-icon">{p.icon}</div>
-          <div className="proj-name">{p.name}</div>
-          <div className="proj-sub" style={{ color: p.accent }}>{p.sub}</div>
-          <p className="proj-desc">{p.desc}</p>
-          <div className="proj-tags">
-            {p.tags.map(t => <span key={t} className="tag">{t}</span>)}
-          </div>
-          <a href={p.github} target="_blank" rel="noopener noreferrer" className="proj-link" style={{ color: p.accent }}>
-            View on GitHub →
-          </a>
-          {!p.featured && (
-            <div style={{ marginTop: '1.25rem', display: 'flex', gap: '1.5rem' }}>
-              {p.metrics.map(m => (
-                <div key={m.lbl}>
-                  <div className="metric-val" style={{ color: p.accent }}>{m.val}</div>
-                  <div className="metric-lbl">{m.lbl}</div>
+    <div ref={ref} className={`${p.wide?'rv-s':'rv'} ${vis?'v':''}`} style={{ transitionDelay:`${i*.12}s`, gridColumn: p.wide?'span 2':undefined }}>
+      <style>{`.pj[data-id="${p.id}"]::after{background:${p.accent}}`}</style>
+      <div ref={cardRef} className={`pj ${p.wide?'wide':''}`} data-id={p.id} onMouseMove={onMove} onMouseLeave={onLeave}>
+        <div className="pj-shine" />
+        <div className="pj-line" style={{ background: p.accent }} />
+        <div className="pj-glow" style={{ background: `radial-gradient(circle at 50% 0, ${p.accent}08, transparent 70%)` }} />
+
+        <div>
+          <div className="pj-icon">{p.icon}</div>
+          <div className="pj-name">{p.name}</div>
+          <div className="pj-sub" style={{ color: p.accent }}>{p.sub}</div>
+          <p className="pj-desc">{p.desc}</p>
+          <div className="pj-tags">{p.tags.map(t=><span key={t} className="p-tag">{t}</span>)}</div>
+          <a href={p.github} target="_blank" rel="noopener noreferrer" className="pj-link" style={{color:p.accent}}>View on GitHub →</a>
+          {!p.wide && (
+            <div className="pj-metrics">
+              {p.metrics.map(m=>(
+                <div key={m.l}>
+                  <div className="pm-val" style={{color:p.accent}}>{m.v}</div>
+                  <div className="pm-lbl">{m.l}</div>
                 </div>
               ))}
             </div>
           )}
         </div>
-        {p.featured && (
-          <div className="proj-metrics">
-            {p.metrics.map(m => (
-              <div key={m.lbl}>
-                <div className="metric-val" style={{ color: p.accent }}>{m.val}</div>
-                <div className="metric-lbl">{m.lbl}</div>
+
+        {p.wide && (
+          <div className="pj-right">
+            {p.metrics.map(m=>(
+              <div key={m.l}>
+                <div className="pm-val" style={{color:p.accent}}>{m.v}</div>
+                <div className="pm-lbl">{m.l}</div>
               </div>
             ))}
           </div>
         )}
-        <span className="proj-num">{p.num}</span>
+        <span className="pj-num">{p.num}</span>
       </div>
     </div>
   )
 }
 
 export default function Projects() {
-  const [tagRef, tagVis] = useReveal()
-  const [titleRef, titleVis] = useReveal()
-
+  const [hr,hv] = useRV()
   return (
-    <section className="sec-wrap" id="projects">
-      <div ref={tagRef} className={`sec-tag reveal ${tagVis ? 'v' : ''}`}>Projects</div>
-      <h2 ref={titleRef} className={`sec-title reveal ${titleVis ? 'v' : ''}`}>THINGS I&apos;VE<br />BUILT</h2>
-      <div className="proj-grid">
-        {projects.map((p, i) => <ProjectCard key={p.id} p={p} index={i} />)}
+    <section className="sw" id="projects">
+      <div ref={hr} className={`rv ${hv?'v':''}`}>
+        <div className="s-eyebrow">Projects</div>
+        <h2 className="s-title">Things I&apos;ve<br />Built</h2>
+        <p className="s-sub">Production-ready AI systems — from social-to-lead agents to trading bots and automation suites.</p>
+      </div>
+      <div className="proj-bento">
+        {PROJECTS.map((p,i)=><ProjCard key={p.id} p={p} i={i}/>)}
       </div>
     </section>
   )
