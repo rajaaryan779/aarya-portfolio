@@ -10,7 +10,7 @@ const body    = Inter({ subsets: ["latin"], display: "swap" });
 const work = [
   { n: "001", t: "JENNA", d: "Deterministic chat fast-path cutting p50 latency ~17x, plus a fabrication guard grounding every dollar figure against real transaction data.", s: "FastAPI / Amazon Bedrock / PostgreSQL", h: "https://github.com/rajaaryan779" },
   { n: "002", t: "MARKET EXPANSION ENGINE", d: "Multi-tenant B2B outreach SaaS. Row-Level Security across 8 tables — tenant isolation enforced by Postgres.", s: "Next.js / Supabase RLS / n8n", h: "https://github.com/rajaaryan779/MEE" },
-  { n: "003", t: "AI-PRASHASHAN", d: "Retrieval-grounded Gemini assistant over 440+ govt resolutions. Refuses rather than fabricates.", s: "Kotlin / Jetpack Compose / Firebase", h: "https://github.com/rajaaryan779/Ai-Prashashan" },
+  { n: "003", t: "AI-PRASHASHAN", d: "Retrieval-grounded Nemotron assistant over 440+ govt resolutions. Refuses rather than fabricates.", s: "Kotlin / Jetpack Compose / Firebase", h: "https://github.com/rajaaryan779/Ai-Prashashan" },
   { n: "004", t: "AEO DIAGNOSTIC", d: "A concurrent engine querying three LLMs at once to score AI-search visibility. Top 25 at Pixii.ai.", s: "FastAPI / Gemini / OpenRouter", h: "https://github.com/rajaaryan779/aeo-diagnostic" },
   { n: "005", t: "GRID07", d: "FAISS persona routing, a LangGraph content engine, and RAG hardened against prompt injection.", s: "LangGraph / FAISS / Groq", h: "https://github.com/rajaaryan779" },
   { n: "006", t: "AUTOMATION SUITE", d: "19 production n8n workflows running for real businesses every single day.", s: "n8n / Pinecone / Gemini", h: "https://github.com/rajaaryan779/n8n-workflows" },

@@ -12,7 +12,7 @@ const GRAD = "linear-gradient(100deg, #6366F1, #EC4899, #F59E0B, #06B6D4)";
 const work = [
   { t: "Jenna", c: "AI Fintech · OyeLabs", d: "Deterministic chat fast-path cutting p50 latency ~17x, plus a fabrication guard grounding every dollar figure in real transactions.", s: "FastAPI · Amazon Bedrock · PostgreSQL", h: "https://github.com/rajaaryan779" },
   { t: "Market Expansion Engine", c: "Multi-Tenant SaaS", d: "B2B lead-gen & AI outreach platform. Row-Level Security across 8 tables — tenant isolation enforced by Postgres.", s: "Next.js · Supabase RLS · n8n", h: "https://github.com/rajaaryan779/MEE" },
-  { t: "Ai-Prashashan", c: "Grounded RAG · Android", d: "Retrieval-grounded Gemini assistant over 440+ govt resolutions. Refuses rather than fabricates.", s: "Kotlin · Jetpack Compose · Firebase", h: "https://github.com/rajaaryan779/Ai-Prashashan" },
+  { t: "Ai-Prashashan", c: "Grounded RAG · Android", d: "Retrieval-grounded Nemotron assistant over 440+ govt resolutions. Refuses rather than fabricates.", s: "Kotlin · Jetpack Compose · Firebase", h: "https://github.com/rajaaryan779/Ai-Prashashan" },
   { t: "AEO Diagnostic Tool", c: "LLM Tooling", d: "Concurrent engine querying three LLMs at once to score AI-search visibility. Top 25 at Pixii.ai.", s: "FastAPI · Gemini · OpenRouter", h: "https://github.com/rajaaryan779/aeo-diagnostic" },
   { t: "Grid07", c: "RAG Engine", d: "FAISS routing, a LangGraph content engine, and RAG hardened against prompt injection.", s: "LangGraph · FAISS · Groq", h: "https://github.com/rajaaryan779" },
   { t: "AI Automation Suite", c: "Workflow Eng.", d: "19 production n8n workflows running for real businesses every day.", s: "n8n · Pinecone · Gemini", h: "https://github.com/rajaaryan779/n8n-workflows" },
