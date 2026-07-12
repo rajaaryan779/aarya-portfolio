@@ -30,83 +30,65 @@ const work = [
     href: "https://github.com/rajaaryan779",
   },
   {
-    no: "02", title: "WhatsCRM", year: "2026",
-    blurb: "A WhatsApp CRM I build at OyeLabs. Every incoming message flows through OpenAI embeddings into a pgvector store, then surfaces the most relevant past context alongside an AI-drafted reply. Idempotent upserts hold it at zero message loss even under bursts of concurrent webhooks.",
-    stack: ["FastAPI", "pgvector", "OpenAI"], tag: "Zero message loss",
-    href: "https://github.com/rajaaryan779",
-  },
-  {
-    no: "03", title: "Market Expansion Engine (MEE)", year: "2026",
-    blurb: "A multi-tenant B2B lead-gen and AI outreach platform I build at OyeLabs. Converted it from single-tenant to a real SaaS: composite (owner_id, place_id) keys and Row-Level Security across all 8 tables, so tenant isolation is enforced by Postgres, not hopeful application code. A thin Next.js control plane hands scrape/crawl/LLM work to n8n, with a live dashboard over Supabase Realtime.",
+    no: "02", title: "Market Expansion Engine (MEE)", year: "2026",
+    blurb: "A multi-tenant B2B lead-gen and AI outreach platform I build at OyeLabs. Converted it from single-tenant to a real SaaS: composite (owner_id, place_id) keys and Row-Level Security across all 8 tables, so tenant isolation is enforced by Postgres, not hopeful application code.",
     stack: ["Next.js", "Supabase RLS", "n8n", "Groq"], tag: "RLS across 8 tables",
     href: "https://github.com/rajaaryan779/MEE",
   },
   {
-    no: "04", title: "Ai-Prashashan", year: "2026",
-    blurb: "A Marathi-language Android app for Maharashtra government employees, with a retrieval-grounded AI assistant over 440+ official Government Resolutions. It answers strictly from the retrieved GR text and cites the source PDF — refuses rather than fabricates when nothing supports the question. I reverse-engineered the state GR portal to bulk-download 534 GRs and OCR'd them with Tesseract.",
+    no: "03", title: "Ai-Prashashan", year: "2026",
+    blurb: "A Marathi-language Android app for Maharashtra government employees, with a retrieval-grounded AI assistant over 440+ official Government Resolutions. It answers strictly from the retrieved GR text and cites the source PDF — refuses rather than fabricates when nothing supports the question.",
     stack: ["Kotlin", "Jetpack Compose", "Firebase"], tag: "534 GRs, grounded answers",
     href: "https://github.com/rajaaryan779/Ai-Prashashan",
   },
   {
-    no: "05", title: "AutoStream Agent", year: "2026",
-    blurb: "A social-to-lead qualification agent built for ServiceHive: a 4-node LangGraph state machine that detects intent, collects details, extracts the lead, and responds — with keyword-grounded retrieval over a local knowledge base and structured, typed output.",
-    stack: ["LangGraph", "Gemini", "Python"], tag: "ServiceHive",
-    href: "https://github.com/rajaaryan779/autostream_agent",
-  },
-  {
-    no: "06", title: "AEO Diagnostic Tool", year: "2026",
+    no: "04", title: "AEO Diagnostic Tool", year: "2026",
     blurb: "A concurrent engine that queries three LLMs at once to score how visible a product is inside AI search — returns a 0–100 grade with fixes. Built it for the Pixii.ai founding-engineer application; it put me in the top 25.",
     stack: ["FastAPI", "Gemini 2.5", "OpenRouter"], tag: "Top 25 — Pixii.ai",
     href: "https://github.com/rajaaryan779/aeo-diagnostic",
   },
   {
-    no: "07", title: "Grid07", year: "2026",
+    no: "05", title: "Grid07", year: "2026",
     blurb: "A three-phase AI system: a FAISS persona router, a LangGraph content engine with JSON-enforced output, and a RAG layer hardened against prompt injection. The kind of thing that breaks in production if you cut corners — so I didn't.",
     stack: ["LangGraph", "FAISS", "Groq"], tag: "Adversarial-hardened RAG",
     href: "https://github.com/rajaaryan779",
   },
   {
-    no: "08", title: "DreamHome", year: "2025",
+    no: "06", title: "DreamHome", year: "2025",
     blurb: "A full-stack real-estate platform with interactive maps and JWT auth. Caching the token validation cut auth latency from 15ms to under 1ms — a 93% drop. Small detail, big difference at scale.",
     stack: ["FastAPI", "Next.js", "PostgreSQL"], tag: "<1ms auth",
     href: "https://github.com/rajaaryan779/Real-Estate-software",
   },
   {
-    no: "09", title: "AI Automation Suite", year: "2026",
-    blurb: "19 production n8n workflows — RAG pipelines (Google Drive to Pinecone to Gemini), multi-agent bots with per-user memory namespacing, WhatsApp & Telegram automations, and Whisper voice transcription. Plumbing that quietly saves people hours every day.",
+    no: "07", title: "AI Automation Suite", year: "2026",
+    blurb: "19 production n8n workflows running for real businesses — RAG pipelines, multi-agent bots with per-user memory, WhatsApp & Telegram automations, voice transcription. Plumbing that quietly saves people hours every day.",
     stack: ["n8n", "Pinecone", "Gemini"], tag: "19 live workflows",
     href: "https://github.com/rajaaryan779/n8n-workflows",
   },
   {
-    no: "10", title: "Binance Futures Trading Bot", year: "2026",
-    blurb: "A testnet order CLI built for PrimetradeAI — HMAC-SHA256 signed REST calls, input validation, structured logging, and modular market/limit order execution.",
-    stack: ["Python", "Binance API", "REST"], tag: "PrimetradeAI",
-    href: "https://github.com/rajaaryan779/trading_bot",
-  },
-  {
-    no: "11", title: "Rlook", year: "2026",
-    blurb: "An AI virtual try-on running fully in-browser — real-time 3D body segmentation and clothes overlay using WebGL and body-pose tracking, no native app or plugin. Still in development.",
-    stack: ["Next.js 15", "Three.js", "MediaPipe"], tag: "In development",
-    href: "https://github.com/rajaaryan779",
+    no: "08", title: "AutoStream Agent", year: "2026",
+    blurb: "A social-to-lead qualification agent built for ServiceHive: a 4-node LangGraph state machine that detects intent, collects details, extracts the lead, and responds — with keyword-grounded retrieval over a local knowledge base.",
+    stack: ["LangGraph", "Gemini", "Python"], tag: "ServiceHive",
+    href: "https://github.com/rajaaryan779/autostream_agent",
   },
 ];
 
 const stack = [
-  { group: "AI / LLMs",   items: ["LangChain", "LangGraph", "RAG", "Grounded Generation", "Claude", "Gemini", "Groq LLaMA", "FAISS", "Pinecone", "pgvector", "Sentence-Transformers", "Amazon Bedrock"] },
+  { group: "AI / LLMs",   items: ["LangChain", "LangGraph", "RAG", "Grounded Generation", "Claude", "Gemini", "Groq LLaMA", "FAISS", "Pinecone", "pgvector", "Amazon Bedrock"] },
   { group: "Backend",     items: ["FastAPI", "Flask", "PostgreSQL", "SQLAlchemy", "Alembic", "REST", "JWT", "asyncio"] },
   { group: "Mobile",      items: ["Kotlin", "Jetpack Compose", "Firebase", "Firestore"] },
   { group: "Automation",  items: ["n8n", "WhatsApp API", "Telegram API", "Webhooks", "Supabase", "Cloudflare R2"] },
   { group: "Languages",   items: ["Python", "TypeScript", "JavaScript", "Kotlin", "SQL"] },
-  { group: "Workflow",    items: ["Cursor", "Claude Code", "Git", "GitHub Actions", "Vercel", "Docker", "AWS"] },
+  { group: "Workflow",    items: ["Cursor", "Claude Code", "Git", "GitHub Actions", "Vercel", "Docker"] },
 ];
 
 const certs = [
-  { name: "Develop Generative AI Applications: Get Started", org: "IBM · Coursera", year: "2026", href: "https://coursera.org/verify/KTAVNVHE8H6H" },
+  { name: "Develop Generative AI Applications", org: "IBM · Coursera", year: "2026", href: "https://coursera.org/verify/KTAVNVHE8H6H" },
   { name: "Claude with Amazon Bedrock", org: "Anthropic", year: "2026", href: "https://verify.skilljar.com/c/mi62wwe5n6hi" },
   { name: "Red Hat OpenStack Administration I", org: "Red Hat", year: "2026", href: "https://credly.com/badges/3115833a-4a07-4cf9-ac22-855f007a5914" },
   { name: "Foundations of Cybersecurity", org: "Google · Coursera", year: "2025", href: "https://coursera.org/verify/MGIHIZWCAA54" },
   { name: "Django Web Framework", org: "Meta · Coursera", year: "2025", href: "https://coursera.org/verify/2Z1HXMQV496N" },
-  { name: "Python & Generative AI, AI Automation with n8n, Deep Learning & CNN, Flask API", org: "Udemy", year: "2025", href: null },
+  { name: "AI Automation w/ n8n, Deep Learning & CNN", org: "Udemy", year: "2025", href: null },
 ];
 
 const journey = [
@@ -148,6 +130,7 @@ function Clock() {
   return <span>{t} IST</span>;
 }
 
+/* Magnetic cursor — small accent dot + ring */
 function Cursor() {
   const [mounted, setMounted] = useState(false);
   const [hover, setHover] = useState(false);
@@ -182,6 +165,7 @@ function Cursor() {
   );
 }
 
+/* ── Work row ──────────────────────────────────────────── */
 function WorkRow({ item }) {
   const [open, setOpen] = useState(false);
   return (
@@ -196,6 +180,7 @@ function WorkRow({ item }) {
       style={{ borderColor: "rgba(23,21,15,0.14)" }}
     >
       <div className="relative py-7 md:py-8 px-1 md:px-4 overflow-hidden">
+        {/* accent fill on hover */}
         <motion.div
           aria-hidden
           initial={false}
@@ -224,6 +209,8 @@ function WorkRow({ item }) {
                 {item.year}
               </motion.span>
             </div>
+
+            {/* expanding detail */}
             <motion.div
               initial={false}
               animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
@@ -257,7 +244,7 @@ function WorkRow({ item }) {
 }
 
 /* ── Page ──────────────────────────────────────────────── */
-export default function Home() {
+export default function Editorial() {
   const { scrollYProgress } = useScroll();
   const bar = useSpring(scrollYProgress, { stiffness: 240, damping: 30 });
 
@@ -281,6 +268,7 @@ export default function Home() {
     >
       <Cursor />
 
+      {/* grain */}
       <div
         aria-hidden
         className="fixed inset-0 z-[9997] pointer-events-none opacity-[0.05] mix-blend-multiply"
@@ -290,8 +278,10 @@ export default function Home() {
         }}
       />
 
+      {/* scroll progress */}
       <motion.div style={{ scaleX: bar, background: ACCENT }} className="fixed top-0 left-0 right-0 h-[2px] z-[9998] origin-left" />
 
+      {/* ── Header ──────────────────────────────────────── */}
       <header className="fixed top-0 left-0 right-0 z-50 mix-blend-difference">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10 h-16 flex items-center justify-between text-white">
           <a href="#top" className={`${mono.className} text-xs tracking-wider uppercase`}>Aarya Vaidya</a>
@@ -305,8 +295,10 @@ export default function Home() {
         </div>
       </header>
 
+      {/* ── Hero ────────────────────────────────────────── */}
       <section id="top" ref={heroRef} className="relative min-h-screen flex flex-col justify-between px-6 md:px-10 pt-28 pb-10 max-w-[1400px] mx-auto">
         <motion.div style={{ y: heroY }} className="flex-1 flex flex-col justify-center">
+          {/* status */}
           <Reveal delay={0.05}>
             <div className={`${mono.className} flex flex-wrap items-center gap-x-6 gap-y-2 text-[11px] md:text-xs uppercase tracking-[0.18em] mb-10`} style={{ color: MUTED }}>
               <span className="flex items-center gap-2">
@@ -319,6 +311,7 @@ export default function Home() {
             </div>
           </Reveal>
 
+          {/* headline */}
           <h1 className={`${serif.className} font-normal`} style={{ fontSize: "clamp(52px, 11vw, 168px)", lineHeight: 0.92, letterSpacing: "-0.02em" }}>
             <Reveal delay={0.1}><span className="block">I build AI</span></Reveal>
             <Reveal delay={0.2}>
@@ -329,6 +322,7 @@ export default function Home() {
             </Reveal>
           </h1>
 
+          {/* sub */}
           <Reveal delay={0.35}>
             <p className={`${sans.className} mt-10 max-w-xl text-base md:text-lg leading-relaxed`} style={{ color: "rgba(23,21,15,0.72)" }}>
               I&apos;m Aarya — an AI/ML engineer who turns messy ideas into systems that
@@ -350,6 +344,7 @@ export default function Home() {
           </Reveal>
         </motion.div>
 
+        {/* bottom marquee */}
         <div className="relative overflow-hidden border-t pt-4" style={{ borderColor: "rgba(23,21,15,0.14)" }}>
           <div className={`${mono.className} flex gap-8 whitespace-nowrap animate-marquee text-xs uppercase tracking-[0.15em]`} style={{ color: MUTED }}>
             {[...Array(2)].flatMap((_, k) =>
@@ -363,6 +358,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Work ────────────────────────────────────────── */}
       <section id="work" className="px-6 md:px-10 py-24 md:py-32 max-w-[1400px] mx-auto">
         <Reveal>
           <div className="flex items-baseline justify-between mb-12 md:mb-16">
@@ -370,10 +366,12 @@ export default function Home() {
             <span className={`${mono.className} text-xs uppercase tracking-wider`} style={{ color: MUTED }}>01 — Projects</span>
           </div>
         </Reveal>
+
         <div>
           {work.map((item) => <WorkRow key={item.no} item={item} />)}
           <div className="border-t" style={{ borderColor: "rgba(23,21,15,0.14)" }} />
         </div>
+
         <Reveal>
           <a href="https://github.com/rajaaryan779" target="_blank" rel="noopener noreferrer" data-cursor
              className={`${mono.className} inline-flex items-center gap-2 mt-10 text-xs uppercase tracking-wider hover:gap-3 transition-all`} style={{ color: INK }}>
@@ -382,13 +380,16 @@ export default function Home() {
         </Reveal>
       </section>
 
+      {/* ── About ───────────────────────────────────────── */}
       <section id="about" className="px-6 md:px-10 py-24 md:py-32" style={{ background: INK, color: PAPER }}>
         <div className="max-w-[1400px] mx-auto">
           <div className="flex items-baseline justify-between mb-14">
             <Reveal><h2 className={`${serif.className}`} style={{ fontSize: "clamp(30px, 5vw, 60px)" }}>About</h2></Reveal>
             <span className={`${mono.className} text-xs uppercase tracking-wider`} style={{ color: "rgba(234,229,218,0.5)" }}>02 — Who</span>
           </div>
+
           <div className="grid lg:grid-cols-[1.4fr_1fr] gap-16">
+            {/* statement */}
             <Reveal>
               <p className={`${serif.className}`} style={{ fontSize: "clamp(24px, 3.4vw, 44px)", lineHeight: 1.25 }}>
                 I started with a diploma in AI/ML in 2021 and never stopped shipping. Today I build
@@ -401,6 +402,8 @@ export default function Home() {
                 and visa sponsorship. If you&apos;re building something hard, I want in.
               </p>
             </Reveal>
+
+            {/* journey */}
             <div>
               {journey.map((j, i) => (
                 <Reveal key={j.year} delay={i * 0.06}>
@@ -416,6 +419,8 @@ export default function Home() {
               ))}
             </div>
           </div>
+
+          {/* big numbers */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20 pt-12 border-t" style={{ borderColor: "rgba(234,229,218,0.14)" }}>
             {[
               { n: "17x", l: "Latency cut (Jenna)" },
@@ -432,11 +437,13 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Stack ───────────────────────────────────────── */}
       <section id="stack" className="px-6 md:px-10 py-24 md:py-32 max-w-[1400px] mx-auto">
         <div className="flex items-baseline justify-between mb-14">
           <Reveal><h2 className={`${serif.className}`} style={{ fontSize: "clamp(30px, 5vw, 60px)" }}>Toolkit</h2></Reveal>
           <span className={`${mono.className} text-xs uppercase tracking-wider`} style={{ color: MUTED }}>03 — Stack</span>
         </div>
+
         <div className="divide-y" style={{ borderColor: "rgba(23,21,15,0.14)" }}>
           {stack.map((row, i) => (
             <Reveal key={row.group} delay={i * 0.05}>
@@ -452,6 +459,8 @@ export default function Home() {
           ))}
           <div className="border-t" style={{ borderColor: "rgba(23,21,15,0.14)" }} />
         </div>
+
+        {/* certifications */}
         <div className="mt-20">
           <Reveal>
             <div className="flex items-baseline justify-between mb-8">
@@ -477,6 +486,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Contact ─────────────────────────────────────── */}
       <section id="contact" className="px-6 md:px-10 py-24 md:py-36" style={{ background: ACCENT, color: INK }}>
         <div className="max-w-[1400px] mx-auto">
           <span className={`${mono.className} text-xs uppercase tracking-wider`}>05 — Contact</span>
@@ -491,6 +501,7 @@ export default function Home() {
               aaryasharadvaidya.10@gmail.com
             </a>
           </Reveal>
+
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 mt-20 pt-10 border-t" style={{ borderColor: "rgba(23,21,15,0.25)" }}>
             {[
               { l: "LinkedIn", v: "aarya-vaidya", h: "https://linkedin.com/in/aarya-vaidya-013227211" },
@@ -507,6 +518,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Footer ──────────────────────────────────────── */}
       <footer className="px-6 md:px-10 py-10" style={{ background: INK, color: "rgba(234,229,218,0.5)" }}>
         <div className={`${mono.className} max-w-[1400px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] uppercase tracking-wider`}>
           <span>© 2026 Aarya Vaidya</span>
