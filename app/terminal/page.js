@@ -19,6 +19,7 @@ const GREEN  = "#3DF07A";
 const projects = [
   { id: "jenna",    name: "Jenna", desc: "Deterministic chat fast-path cutting p50 latency ~17x. Fabrication guard grounds every dollar figure.", stack: "FastAPI · Amazon Bedrock · PostgreSQL", href: "https://github.com/rajaaryan779" },
   { id: "mee",      name: "Market Expansion Engine", desc: "Multi-tenant B2B outreach SaaS. Row-Level Security across 8 tables.", stack: "Next.js · Supabase RLS · n8n", href: "https://github.com/rajaaryan779/MEE" },
+  { id: "alianza",  name: "Alianza", desc: "Security audit (185 findings) + autonomous QA Testing Agent. 4 critical vulns reproduced red-to-green.", stack: "NestJS · PostgreSQL · Jest/Supertest", href: "https://github.com/rajaaryan779" },
   { id: "aiprash",  name: "Ai-Prashashan", desc: "Retrieval-grounded assistant over 440+ govt resolutions. Refuses rather than fabricates.", stack: "Kotlin · Jetpack Compose · Firebase", href: "https://github.com/rajaaryan779/Ai-Prashashan" },
   { id: "aeo",      name: "AEO Diagnostic Tool", desc: "3-LLM concurrent engine scoring AI-search visibility. Top 25 @ Pixii.ai.", stack: "FastAPI · Gemini · OpenRouter", href: "https://github.com/rajaaryan779/aeo-diagnostic" },
   { id: "grid07",   name: "Grid07", desc: "FAISS routing + LangGraph engine + injection-hardened RAG.", stack: "LangGraph · FAISS · Groq", href: "https://github.com/rajaaryan779" },

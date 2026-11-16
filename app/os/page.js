@@ -9,6 +9,7 @@ const ui = Inter({ subsets: ["latin"], display: "swap" });
 const projects = [
   { t: "Jenna", d: "Deterministic chat fast-path, ~17x latency cut. Fabrication guard grounds every dollar figure.", s: "FastAPI · Amazon Bedrock · PostgreSQL" },
   { t: "Market Expansion Engine", d: "Multi-tenant SaaS. Row-Level Security across 8 tables.", s: "Next.js · Supabase RLS · n8n" },
+  { t: "Alianza", d: "Security audit (185 findings) + autonomous QA Testing Agent. 4 critical vulns reproduced red-to-green.", s: "NestJS · PostgreSQL · Jest/Supertest" },
   { t: "Ai-Prashashan", d: "Retrieval-grounded assistant over 440+ govt resolutions. Refuses vs. fabricates.", s: "Kotlin · Jetpack Compose · Firebase" },
   { t: "AEO Diagnostic Tool", d: "3-LLM concurrent AI-search scorer. Top 25 @ Pixii.ai.", s: "FastAPI · Gemini · OpenRouter" },
   { t: "Grid07", d: "FAISS routing + LangGraph + injection-hardened RAG.", s: "LangGraph · FAISS · Groq" },

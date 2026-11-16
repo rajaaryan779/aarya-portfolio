@@ -12,6 +12,7 @@ const BG = "#060608", TEXT = "#EDEDF2", MUTED = "#6E6E84", ACCENT = "#8B5CF6";
 const work = [
   { t: "Jenna", c: "AI Fintech · OyeLabs", d: "Deterministic chat fast-path cutting p50 latency ~17x, plus a fabrication guard grounding every dollar figure.", s: "FastAPI · Amazon Bedrock · PostgreSQL", h: "https://github.com/rajaaryan779" },
   { t: "Market Expansion Engine", c: "Multi-Tenant SaaS", d: "B2B lead-gen & outreach platform. Row-Level Security across 8 tables.", s: "Next.js · Supabase RLS · n8n", h: "https://github.com/rajaaryan779/MEE" },
+  { t: "Alianza", c: "Security Audit & Agentic QA", d: "Independent security audit (185 findings) plus an autonomous QA Testing Agent that reproduced 4 critical vulnerabilities as fail-first tests, verified red-to-green.", s: "NestJS · PostgreSQL · Jest/Supertest", h: "https://github.com/rajaaryan779" },
   { t: "Ai-Prashashan", c: "Grounded RAG · Android", d: "Retrieval-grounded assistant over 440+ govt resolutions. Refuses rather than fabricates.", s: "Kotlin · Jetpack Compose · Firebase", h: "https://github.com/rajaaryan779/Ai-Prashashan" },
   { t: "AEO Diagnostic Tool", c: "LLM Tooling", d: "Concurrent engine querying three LLMs at once to score AI-search visibility. Top 25 at Pixii.ai.", s: "FastAPI · Gemini · OpenRouter", h: "https://github.com/rajaaryan779/aeo-diagnostic" },
   { t: "Grid07", c: "RAG Engine", d: "FAISS routing, LangGraph content engine, injection-hardened RAG.", s: "LangGraph · FAISS · Groq", h: "https://github.com/rajaaryan779" },

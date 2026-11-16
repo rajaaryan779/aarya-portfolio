@@ -12,6 +12,7 @@ const C = ["#FFD23F", "#FF90E8", "#8AD8FF", "#A6E3A1", "#C4B5FD", "#FFB37B"];
 const work = [
   { t: "Jenna", d: "Deterministic chat fast-path cutting p50 latency ~17x, plus a fabrication guard grounding every dollar figure in real transactions.", s: "FastAPI · Amazon Bedrock · PostgreSQL", h: "https://github.com/rajaaryan779" },
   { t: "Market Expansion Engine", d: "Multi-tenant B2B outreach SaaS. Row-Level Security across 8 tables — tenant isolation enforced by Postgres.", s: "Next.js · Supabase RLS · n8n", h: "https://github.com/rajaaryan779/MEE" },
+  { t: "Alianza", d: "Independent security audit of a 39-module NestJS SaaS (185 findings) plus an autonomous QA Testing Agent that reproduced 4 critical vulnerabilities as fail-first tests, verified red-to-green.", s: "NestJS · PostgreSQL · Jest/Supertest", h: "https://github.com/rajaaryan779" },
   { t: "Ai-Prashashan", d: "Retrieval-grounded Nemotron assistant over 440+ govt resolutions. Refuses rather than fabricates.", s: "Kotlin · Jetpack Compose · Firebase", h: "https://github.com/rajaaryan779/Ai-Prashashan" },
   { t: "AEO Diagnostic Tool", d: "Queries 3 LLMs at once to score AI-search visibility. Top 25 at Pixii.ai.", s: "FastAPI · Gemini · OpenRouter", h: "https://github.com/rajaaryan779/aeo-diagnostic" },
   { t: "Grid07", d: "FAISS routing + LangGraph engine + injection-hardened RAG.", s: "LangGraph · FAISS · Groq", h: "https://github.com/rajaaryan779" },
