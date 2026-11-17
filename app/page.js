@@ -1,473 +1,442 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import {
-  motion, useScroll, useSpring, useTransform, useMotionValue,
-  useInView, animate, useAnimationFrame, useMotionTemplate,
-} from "framer-motion";
-import { Space_Grotesk, JetBrains_Mono, Instrument_Serif } from "next/font/google";
+import { motion, useScroll, useSpring, useTransform, useMotionValue, useInView, animate } from "framer-motion";
+import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { work, stack, certs, moreCerts, journey } from "./data";
 
-/* ── Fonts ───────────────────────────────────────────────
-   Trionn uses Neue Haas Grotesk (display/body) + PP Editorial (serif numbers).
-   Free stand-ins: Helvetica Neue/Arial stack for grotesk, Instrument Serif for numbers. */
-const display = Space_Grotesk({ subsets: ["latin"], display: "swap" }); // grotesk UI
-const serif  = Instrument_Serif({ weight: "400", subsets: ["latin"], style: ["normal", "italic"], display: "swap" });
-const mono   = JetBrains_Mono({ subsets: ["latin"], display: "swap" });
+const sans = Space_Grotesk({ subsets: ["latin"], weight: ["400", "500", "700"], display: "swap" });
+const mono = JetBrains_Mono({ subsets: ["latin"], display: "swap" });
 
-/* ── Exact Trionn tokens ───────────────────────────────── */
-const BG     = "#040508";   // near-black (slightly blue)
-const SURFACE= "#131415";
-const PAPER  = "#E6E4E2";   // warm off-white
-const MUTED  = "#8A8780";
-const ACCENT = "#DC0A00";   // true Trionn red
-const LINE   = "rgba(230,228,226,0.14)";
+/* Graded to one red and one deep green, like a film grade */
+const BG = "#0A0B0A";
+const INK = "#ECE8DF";
+const MUTED = "#7C7F76";
+const RED = "#E5341D";
+const GREEN = "#1F5A43";
+const LINE = "rgba(236,232,223,0.14)";
 
-/* ── Data ──────────────────────────────────────────────── */
-const work = [
-  { no: "01", title: "Jenna", tag: "AI financial coach", year: "2026", grad: ["#DC0A00", "#1a0604"],
-    blurb: "AI financial coaching app at OyeLabs. A deterministic fast-path answers read-only money questions with no LLM call — ~1,950ms → 115ms (≈17x). A fabrication guard checks every figure against real transaction data.",
-    stack: ["FastAPI", "Amazon Bedrock", "PostgreSQL"], href: "https://github.com/rajaaryan779" },
-  { no: "02", title: "WhatsCRM", tag: "WhatsApp CRM", year: "2026", grad: ["#3B82F6", "#06121f"],
-    blurb: "WhatsApp CRM at OyeLabs. Every message flows through OpenAI embeddings into pgvector, surfacing relevant context with an AI-drafted reply. Idempotent upserts hold zero message loss under concurrent webhook bursts.",
-    stack: ["FastAPI", "pgvector", "OpenAI"], href: "https://github.com/rajaaryan779" },
-  { no: "03", title: "Market Expansion Engine", tag: "B2B lead-gen SaaS", year: "2026", grad: ["#22D3EE", "#04181c"],
-    blurb: "Multi-tenant lead-gen + AI outreach platform at OyeLabs. Rebuilt single-tenant → real SaaS with composite keys + Row-Level Security across 8 tables. Next.js control plane + live Supabase Realtime dashboard.",
-    stack: ["Next.js", "Supabase RLS", "n8n", "Groq"], href: "https://github.com/rajaaryan779/MEE" },
-  { no: "04", title: "Alianza Security Audit", tag: "Security & agentic QA", year: "2026", grad: ["#EF4444", "#1f0606"],
-    blurb: "Security audit of a NestJS/PostgreSQL SaaS: 185 findings, including IDOR and mass-assignment flaws. Built an agentic QA harness that reproduces critical vulnerabilities as fail-first tests, so every fix is proven by a test that goes red then green.",
-    stack: ["NestJS", "PostgreSQL", "Security testing", "Agentic QA"], href: "https://github.com/rajaaryan779" },
-  { no: "05", title: "AEO Diagnostic Tool", tag: "Top-25 Pixii.ai", year: "2026", grad: ["#A855F7", "#160a1f"],
-    blurb: "Queries three LLMs at once (Gemini 2.5 Flash, Qwen 3, Auto AI) to score product visibility in AI search — 0–100 grade with fixes. Built for Pixii.ai founding-engineer round; landed a top-25 shortlist.",
-    stack: ["FastAPI", "Gemini 2.5", "OpenRouter"], href: "https://github.com/rajaaryan779/aeo-diagnostic" },
-  { no: "06", title: "Grid07", tag: "Adversarial-hardened RAG", year: "2026", grad: ["#F59E0B", "#1f1404"],
-    blurb: "Three-phase AI system: FAISS persona router, LangGraph content engine with JSON-enforced output, RAG layer hardened against prompt injection with a persona-lock header.",
-    stack: ["LangGraph", "FAISS", "Groq"], href: "https://github.com/rajaaryan779" },
-  { no: "07", title: "DreamHome", tag: "Full-stack real estate", year: "2025", grad: ["#10B981", "#041a13"],
-    blurb: "Full-stack real-estate platform with interactive maps + JWT auth. Caching token validation cut auth latency 15ms → <1ms (93% drop). Alembic zero-downtime migrations.",
-    stack: ["FastAPI", "Next.js", "PostgreSQL"], href: "https://github.com/rajaaryan779/Real-Estate-software" },
-];
+const EMAIL = "aaryasharadvaidya.10@gmail.com";
 
-const facts = [
-  { n: 12, suffix: "+", label: "Production AI projects" },
-  { n: 19, suffix: "",  label: "Live automation workflows" },
-  { n: 17, suffix: "x", label: "Latency cut on Jenna reads" },
-  { n: 185, suffix: "", label: "Findings in a security audit" },
-];
-
-const serviceGroups = [
-  { key: "A.I.", items: [
-    ["AI & Intelligent Automation", "AI-powered solutions that enhance products, automate workflows, and unlock smarter digital experiences."],
-    ["Applied AI Engineering", "LangGraph agents, grounded RAG, and LLM systems with latency, reliability, and guardrails done right."],
-  ]},
-  { key: "Design", items: [
-    ["Product & Interface Design", "Thoughtful product design that captures attention, deepens engagement, and builds lasting loyalty."],
-    ["Brand & Presence", "Sharp, credible portfolios and product sites that position a builder for the roles they want."],
-  ]},
-  { key: "Development", items: [
-    ["Web & Full-Stack Development", "Custom web development with a product focus — FastAPI, Next.js, PostgreSQL, built to scale."],
-    ["Automation & Integrations", "n8n workflows, WhatsApp/Telegram bots, and webhook plumbing that quietly removes repetitive work."],
-  ]},
-  { key: "Branding", items: [
-    ["Systems & Story", "Coherent technical narrative and presence for engineers and AI products."],
-    ["Credibility by craft", "Clarity-first positioning that makes hard work legible to the right people."],
-  ]},
-];
-
-const clients = [
-  { quote: "Aarya ships AI systems that actually run in production — the latency and reliability work is what separates a demo from a product. Rare at this stage.", name: "Founding Engineer", org: "Pixii.ai · Shortlist" },
-  { quote: "Built our agentic QA harness that reproduced critical vulns as fail-first tests. Thorough, fast, security-minded.", name: "CTO", org: "Alianza" },
-  { quote: "Turned a single-tenant script into a real multi-tenant SaaS with RLS across every table. Clean, measured execution.", name: "Tech Lead", org: "OyeLabs" },
-  { quote: "The AEO tool he built for our founding-engineer round was sharper than most senior applicants' work. Top 25, deservedly.", name: "Hiring Panel", org: "Pixii.ai" },
-];
-
-const journey = [
-  { year: "2026", role: "AI Engineering Intern", org: "OyeLabs Technologies", note: "Jenna · WhatsCRM · MEE · Security audit" },
-  { year: "2026", role: "AI Agent Developer Intern", org: "ServiceHive", note: "AutoStream agentic workflow" },
-  { year: "2025", role: "AI Intern", org: "Elevate Labs", note: "LSTM stock-price forecasting" },
-  { year: "2024", role: "B.Tech CSE (AI/ML)", org: "Pimpri Chinchwad University", note: "Final year · 2nd prize PCU InnovateX" },
-  { year: "2021", role: "Diploma in AI/ML", org: "K.K. Wagh Polytechnic", note: "Where it started" },
-];
-
-/* ── Counter (serif, Trionn .numbers) ─────────────────── */
-function Counter({ value, suffix }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
-  const [val, setVal] = useState(0);
-  useEffect(() => {
-    if (!inView) return;
-    const c = animate(0, value, { duration: 1.6, ease: [0.16, 1, 0.3, 1], onUpdate: (v) => setVal(Math.round(v)) });
-    return () => c.stop();
-  }, [inView, value]);
-  return <span ref={ref}>{val}{suffix}</span>;
-}
-
-function Reveal({ children, delay = 0, y = 28, className = "" }) {
+/* ── helpers ───────────────────────────────────────────── */
+function Label({ children, className = "" }) {
   return (
-    <motion.div initial={{ opacity: 0, y }} whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.85, delay, ease: [0.16, 1, 0.3, 1] }} className={className}>{children}</motion.div>
-  );
-}
-
-/* ── Magnetic button (Trionn-style pull toward cursor) ── */
-function Magnetic({ children, strength = 0.35 }) {
-  const ref = useRef(null);
-  const x = useMotionValue(0), y = useMotionValue(0);
-  const sx = useSpring(x, { stiffness: 200, damping: 15 }), sy = useSpring(y, { stiffness: 200, damping: 15 });
-  const onMove = (e) => {
-    const r = ref.current.getBoundingClientRect();
-    x.set((e.clientX - (r.left + r.width / 2)) * strength);
-    y.set((e.clientY - (r.top + r.height / 2)) * strength);
-  };
-  const reset = () => { x.set(0); y.set(0); };
-  return (
-    <motion.span ref={ref} style={{ x: sx, y: sy, display: "inline-block" }}
-      onMouseMove={onMove} onMouseLeave={reset} data-cursor>
+    <span className={`${mono.className} text-[11px] uppercase tracking-[0.14em] ${className}`} style={{ color: MUTED }}>
       {children}
-    </motion.span>
-  );
-}
-
-/* ── Hero "blast" — real particle explosion on hold ───── */
-function Blast() {
-  const [hold, setHold] = useState(false);
-  const [burst, setBurst] = useState(0);
-  const parts = Array.from({ length: 18 });
-  const fire = () => { setBurst((b) => b + 1); };
-  return (
-    <span className="inline-flex items-center gap-2 select-none" style={{ color: MUTED }}>
-      <span className={`${mono.className} text-[11px] uppercase tracking-[0.2em]`}
-        onMouseDown={() => { setHold(true); fire(); }} onMouseUp={() => setHold(false)} onMouseLeave={() => setHold(false)}
-        onTouchStart={() => { setHold(true); fire(); }} onTouchEnd={() => setHold(false)} style={{ cursor: "none", position: "relative" }}>
-        hold to{" "}
-        <motion.span key={burst} animate={{ scale: hold ? 1.15 : 1, color: hold ? ACCENT : PAPER }}
-          transition={{ type: "spring", stiffness: 300, damping: 18 }} style={{ display: "inline-block", fontWeight: 700 }}>blast</motion.span>
-        {/* particle burst */}
-        {hold && (
-          <span className="absolute left-1/2 top-1/2 pointer-events-none" style={{ width: 0, height: 0 }}>
-            {parts.map((_, i) => {
-              const ang = (i / parts.length) * Math.PI * 2;
-              const dist = 40 + (i % 3) * 14;
-              return (
-                <motion.span key={i} initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
-                  animate={{ x: Math.cos(ang) * dist, y: Math.sin(ang) * dist, opacity: 0, scale: 0.2 }}
-                  transition={{ duration: 0.7, ease: "easeOut" }}
-                  style={{ position: "absolute", width: 4, height: 4, borderRadius: "50%", background: i % 2 ? ACCENT : PAPER }} />
-              );
-            })}
-          </span>
-        )}
-      </span>
-      <span aria-hidden style={{ color: ACCENT }}>⚡</span>
-      <span className={`${mono.className} text-[11px] uppercase tracking-[0.2em]`} style={{ color: MUTED }}>Dare to touch the lines.</span>
     </span>
   );
 }
 
-/* ── Work card with cursor-follow spotlight ────────────── */
-function WorkCard({ item }) {
-  const [hover, setHover] = useState(false);
-  const mx = useMotionValue(50), my = useMotionValue(50);
-  const onMove = (e) => {
-    const r = e.currentTarget.getBoundingClientRect();
-    mx.set(((e.clientX - r.left) / r.width) * 100);
-    my.set(((e.clientY - r.top) / r.height) * 100);
-  };
-  const spot = useMotionTemplate`radial-gradient(220px circle at ${mx}% ${my}%, rgba(220,10,0,0.18), transparent 60%)`;
+function Reveal({ children, delay = 0, className = "" }) {
   return (
-    <motion.a href={item.href} target="_blank" rel="noopener noreferrer" data-cursor
-      onHoverStart={() => setHover(true)} onHoverEnd={() => setHover(false)} onMouseMove={onMove}
-      className="group block border-t pt-10 pb-12 relative" style={{ borderColor: LINE }}>
-      <motion.div className="absolute inset-0 pointer-events-none" style={{ background: spot, opacity: hover ? 1 : 0, transition: "opacity .3s" }} />
-      <div className="grid md:grid-cols-[1.05fr_1fr] gap-8 items-center relative">
-        <div>
-          <div className={`${mono.className} text-xs uppercase tracking-[0.15em] mb-3`} style={{ color: MUTED }}>{item.no} — {item.tag} · {item.year}</div>
-          <h3 className={`${serif.className}`} style={{ fontSize: "clamp(34px, 5.5vw, 68px)", lineHeight: 0.95 }}>{item.title}</h3>
-          <p className={`${display.className} mt-5 text-base leading-relaxed max-w-md`} style={{ color: "rgba(230,228,226,0.72)" }}>{item.blurb}</p>
-          <div className="flex flex-wrap gap-2 mt-6">
-            {item.stack.map((s) => (
-              <span key={s} className={`${mono.className} text-[11px] px-2.5 py-1 rounded-full`} style={{ border: "1px solid rgba(230,228,226,0.3)", color: PAPER }}>{s}</span>
-            ))}
-          </div>
-          <span className={`${mono.className} inline-flex items-center gap-2 mt-6 text-xs uppercase tracking-wider`} style={{ color: ACCENT }}>Explore project ↗</span>
-        </div>
-        <motion.div className="relative aspect-[4/3] rounded-lg overflow-hidden"
-          animate={{ scale: hover ? 1.03 : 1 }} transition={{ duration: 0.5, ease: [0.16,1,0.3,1] }}
-          style={{ background: `linear-gradient(135deg, ${item.grad[0]}, ${item.grad[1]})` }}>
-          <div className={`${serif.className} absolute inset-0 flex items-center justify-center text-center px-6`}
-            style={{ fontSize: "clamp(26px,4vw,50px)", color: "rgba(255,255,255,0.92)" }}>{item.title}</div>
-          <motion.div className="absolute inset-0" animate={{ scale: hover ? 1.1 : 1 }} transition={{ duration: 0.6 }}
-            style={{ background: "radial-gradient(circle at 30% 20%, rgba(255,255,255,0.18), transparent 55%)" }} />
-        </motion.div>
-      </div>
-    </motion.a>
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
   );
 }
 
-/* ── Cursor ────────────────────────────────────────────── */
-function Cursor() {
-  const [mounted, setMounted] = useState(false);
-  const [hover, setHover] = useState(false);
-  const mx = useMotionValue(-100), my = useMotionValue(-100);
-  const rx = useSpring(mx, { stiffness: 200, damping: 20, mass: 0.4 });
-  const ry = useSpring(my, { stiffness: 200, damping: 20, mass: 0.4 });
-  const dx = useMotionValue(-100), dy = useMotionValue(-100);
+/* Section header styled like a slate: SEQ. 02 ........ TC */
+function Seq({ n, title, right }) {
+  return (
+    <div className="flex items-end justify-between border-t pt-4 mb-10 md:mb-16" style={{ borderColor: LINE }}>
+      <div className="flex gap-4 items-baseline">
+        <Label>SEQ. {n}</Label>
+        <Label className="hidden sm:inline">{title}</Label>
+      </div>
+      <Label>{right}</Label>
+    </div>
+  );
+}
+
+function Timecode() {
+  const [tc, setTc] = useState("00:00:00:00");
   useEffect(() => {
-    if (typeof window === "undefined" || window.matchMedia("(pointer: coarse)").matches) return;
-    setMounted(true);
-    const move = (e) => { mx.set(e.clientX); my.set(e.clientY); dx.set(e.clientX); dy.set(e.clientY); };
-    const over = (e) => setHover(!!e.target.closest("a, button, [data-cursor]"));
+    const t0 = performance.now();
+    const id = setInterval(() => {
+      const ms = performance.now() - t0;
+      const f = Math.floor((ms / 1000) * 24) % 24;
+      const s = Math.floor(ms / 1000) % 60;
+      const m = Math.floor(ms / 60000) % 60;
+      const p = (n) => String(n).padStart(2, "0");
+      setTc(`00:${p(m)}:${p(s)}:${p(f)}`);
+    }, 42);
+    return () => clearInterval(id);
+  }, []);
+  return <span>{tc}</span>;
+}
+
+function Clock() {
+  const [t, setT] = useState("");
+  useEffect(() => {
+    const tick = () =>
+      setT(new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Asia/Kolkata" }).format(new Date()));
+    tick();
+    const id = setInterval(tick, 10000);
+    return () => clearInterval(id);
+  }, []);
+  return <span>{t} IST</span>;
+}
+
+function Counter({ to, suffix = "" }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const [v, setV] = useState(0);
+  useEffect(() => {
+    if (!inView) return;
+    const c = animate(0, to, { duration: 1.6, ease: [0.16, 1, 0.3, 1], onUpdate: (x) => setV(Math.round(x)) });
+    return () => c.stop();
+  }, [inView, to]);
+  return <span ref={ref}>{v}{suffix}</span>;
+}
+
+/* Cursor that grows into a label over cards */
+function Cursor() {
+  const [on, setOn] = useState(false);
+  const [label, setLabel] = useState("");
+  const x = useMotionValue(-100), y = useMotionValue(-100);
+  const sx = useSpring(x, { stiffness: 260, damping: 24, mass: 0.4 });
+  const sy = useSpring(y, { stiffness: 260, damping: 24, mass: 0.4 });
+  useEffect(() => {
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+    setOn(true);
+    const move = (e) => { x.set(e.clientX); y.set(e.clientY); };
+    const over = (e) => {
+      const el = e.target.closest("[data-cursor], a, button");
+      setLabel(el ? el.getAttribute("data-cursor") || "" : "");
+    };
     window.addEventListener("mousemove", move);
     window.addEventListener("mouseover", over);
     return () => { window.removeEventListener("mousemove", move); window.removeEventListener("mouseover", over); };
-  }, [mx, my, dx, dy]);
-  if (!mounted) return null;
+  }, [x, y]);
+  if (!on) return null;
+  const big = label.length > 0;
   return (
-    <>
-      <motion.div style={{ x: rx, y: ry }} className="fixed top-0 left-0 z-[9999] pointer-events-none">
-        <motion.div animate={{ width: hover ? 56 : 26, height: hover ? 56 : 26, opacity: hover ? 1 : 0.6 }}
-          transition={{ type: "spring", stiffness: 300, damping: 22 }} style={{ border: `1px solid ${ACCENT}` }}
-          className="rounded-full -translate-x-1/2 -translate-y-1/2" />
+    <motion.div style={{ x: sx, y: sy }} className="fixed top-0 left-0 z-[9999] pointer-events-none">
+      <motion.div
+        animate={{ width: big ? 84 : 14, height: big ? 84 : 14 }}
+        transition={{ type: "spring", stiffness: 300, damping: 24 }}
+        className={`${mono.className} -translate-x-1/2 -translate-y-1/2 rounded-full flex items-center justify-center text-[10px] uppercase tracking-wider`}
+        style={{ background: RED, color: INK, mixBlendMode: big ? "normal" : "difference" }}
+      >
+        {big ? label : ""}
       </motion.div>
-      <motion.div style={{ x: dx, y: dy, background: ACCENT }} className="fixed top-0 left-0 w-1.5 h-1.5 rounded-full z-[9999] pointer-events-none -translate-x-1/2 -translate-y-1/2" />
-    </>
+    </motion.div>
+  );
+}
+
+/* ── Filmstrip of projects, scrolls sideways while the page scrolls down ── */
+function Filmstrip() {
+  const section = useRef(null);
+  const track = useRef(null);
+  const [dist, setDist] = useState(0);
+  const { scrollYProgress } = useScroll({ target: section, offset: ["start start", "end end"] });
+  const x = useTransform(scrollYProgress, [0, 1], [0, -dist]);
+  const bar = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
+  useEffect(() => {
+    const measure = () => setDist(Math.max(0, track.current.scrollWidth - window.innerWidth + 48));
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
+  return (
+    <section id="works" ref={section} style={{ height: `calc(100vh + ${dist}px)` }} className="relative">
+      <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
+        <div className="px-5 md:px-10 mb-6 flex items-end justify-between">
+          <div>
+            <Label>SEQ. 02 / SELECTED WORKS</Label>
+            <h2 className={`${sans.className} font-bold uppercase leading-[0.9] mt-3 text-[clamp(2.2rem,6vw,5rem)]`}>
+              Works<span style={{ color: RED }}>.</span> <span style={{ color: MUTED }}>14 frames</span>
+            </h2>
+          </div>
+          <Label className="hidden md:block">KEEP SCROLLING ↓ DRAGS THE REEL →</Label>
+        </div>
+
+        <motion.div ref={track} style={{ x }} className="flex gap-4 md:gap-5 px-5 md:px-10 w-max">
+          {work.map((w, i) => (
+            <a
+              key={w.no}
+              href={w.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-cursor="Open"
+              className="group relative shrink-0 w-[80vw] sm:w-[360px] h-[58vh] md:h-[62vh] min-h-[400px] flex flex-col justify-between p-5 md:p-6 border overflow-hidden transition-colors duration-500"
+              style={{ borderColor: LINE, background: i % 2 ? "#0E1311" : "#0C0D0C" }}
+            >
+              <div
+                aria-hidden
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                style={{ background: `radial-gradient(120% 80% at 80% 0%, ${GREEN}88, transparent 60%)` }}
+              />
+              <div className="relative flex items-center justify-between">
+                <Label>FR {w.no} · SC {i + 1}A, TK 1</Label>
+                <Label>{w.year}</Label>
+              </div>
+              <div className="relative">
+                <div className={`${mono.className} text-[11px] uppercase tracking-wider mb-3`} style={{ color: RED }}>[ {w.tag} ]</div>
+                <h3 className={`${sans.className} font-bold uppercase leading-[0.95] text-2xl md:text-[1.7rem]`}>{w.title}</h3>
+                <p className={`${sans.className} text-[13px] leading-relaxed mt-4 line-clamp-5 group-hover:line-clamp-none`} style={{ color: "rgba(236,232,223,0.68)" }}>
+                  {w.blurb}
+                </p>
+                <div className="flex flex-wrap gap-1.5 mt-4">
+                  {w.stack.map((s) => (
+                    <span key={s} className={`${mono.className} text-[10px] px-2 py-1 border uppercase`} style={{ borderColor: LINE, color: MUTED }}>{s}</span>
+                  ))}
+                </div>
+              </div>
+            </a>
+          ))}
+        </motion.div>
+
+        <div className="mx-5 md:mx-10 mt-6 h-px relative" style={{ background: LINE }}>
+          <motion.div style={{ width: bar, background: RED }} className="absolute inset-y-0 left-0 h-px" />
+        </div>
+      </div>
+    </section>
   );
 }
 
 /* ── Page ──────────────────────────────────────────────── */
-export default function Home() {
-  const { scrollYProgress } = useScroll();
-  const bar = useSpring(scrollYProgress, { stiffness: 240, damping: 30 });
-  const heroRef = useRef(null);
-  const { scrollYProgress: heroP } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const heroY = useTransform(heroP, [0, 1], [0, 140]);
-  const heroOpacity = useTransform(heroP, [0, 0.8], [1, 0]);
-
-  useEffect(() => {
-    document.body.style.backgroundColor = BG;
-    document.documentElement.style.backgroundColor = BG;
-    return () => { document.body.style.backgroundColor = ""; document.documentElement.style.backgroundColor = ""; };
-  }, []);
+export default function Cinema() {
+  const hero = useRef(null);
+  const { scrollYProgress } = useScroll({ target: hero, offset: ["start start", "end start"] });
+  const titleY = useTransform(scrollYProgress, [0, 1], [0, 160]);
+  const glowY = useTransform(scrollYProgress, [0, 1], [0, -120]);
+  const fade = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const tape = [...stack.flatMap((g) => g.items.slice(0, 4)), "Security audits", "Row-Level Security"];
 
   return (
-    <main className={display.className} style={{ background: BG, color: PAPER, minHeight: "100vh", cursor: "none" }}>
+    <main className={`${sans.className} relative`} style={{ background: BG, color: INK }}>
       <Cursor />
-      <motion.div style={{ scaleX: bar, background: ACCENT }} className="fixed top-0 left-0 right-0 h-[2px] z-[9998] origin-left" />
 
-      <header className="fixed top-0 left-0 right-0 z-50 mix-blend-difference">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 h-16 flex items-center justify-between text-white">
-          <a href="#top" className={`${mono.className} text-xs tracking-wider uppercase`}>Aarya Vaidya</a>
-          <nav className={`${mono.className} hidden md:flex items-center gap-7 text-xs tracking-wider uppercase`}>
-            <a href="#work" className="hover:opacity-60 transition-opacity">Work</a>
-            <a href="#about" className="hover:opacity-60 transition-opacity">About</a>
-            <a href="#services" className="hover:opacity-60 transition-opacity">Services</a>
-            <a href="#contact" className="hover:opacity-60 transition-opacity">Contact</a>
-          </nav>
-          <a href="mailto:aaryasharadvaidya.10@gmail.com" className={`${mono.className} text-xs tracking-wider hidden sm:block hover:opacity-60`}>Let&apos;s talk ↗</a>
-        </div>
+      {/* film grain */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 z-[60] opacity-[0.07] mix-blend-screen"
+        style={{ backgroundImage: "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")" }}
+      />
+
+      {/* nav */}
+      <header className="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-5 md:px-10 py-4 mix-blend-difference">
+        <a href="#top" data-cursor="Top" className={`${mono.className} text-xs uppercase tracking-[0.14em]`}>Aarya Vaidya ®</a>
+        <nav className={`${mono.className} hidden md:flex gap-8 text-xs uppercase tracking-[0.14em]`}>
+          {[["Works", "works", "01"], ["Stack", "stack", "02"], ["About", "about", "03"], ["Contact", "contact", "04"]].map(([l, id, n]) => (
+            <a key={id} href={`#${id}`} className="hover:opacity-60 transition-opacity">{l} <sup>{n}</sup></a>
+          ))}
+        </nav>
+        <a href={`mailto:${EMAIL}`} className={`${mono.className} text-xs uppercase tracking-[0.14em] px-4 py-2 border border-current`}>Hire me →</a>
       </header>
 
-      {/* HERO */}
-      <section id="top" ref={heroRef} className="relative min-h-screen flex flex-col justify-between px-6 md:px-10 pt-28 pb-10 max-w-[1400px] mx-auto">
-        <motion.div style={{ y: heroY, opacity: heroOpacity }} className="flex-1 flex flex-col justify-center">
-          <Reveal delay={0.05}>
-            <div className={`${mono.className} flex flex-wrap items-center gap-x-6 gap-y-2 text-[11px] md:text-xs uppercase tracking-[0.18em] mb-10`} style={{ color: MUTED }}>
-              <span className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full inline-block" style={{ background: ACCENT }} /> Open to internships &amp; graduate roles</span>
-              <span>AI / ML Engineer · Security</span>
-              <span>Pune, India · Seeking roles in Australia · Open to relocation &amp; visa sponsorship</span>
-            </div>
-          </Reveal>
-          <h1 style={{ "font-family": "'Helvetica Neue', Helvetica, Arial, sans-serif", fontWeight: 500, fontSize: "clamp(5rem, 9.164vw, 10rem)", lineHeight: 0.672, letterSpacing: "-0.04em" }}>
-            <span className="block overflow-hidden"><motion.span className="block" initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 1, ease: [0.16,1,0.3,1], delay: 0.1 }}>Designed to</motion.span></span>
-            <span className="block overflow-hidden"><motion.span className="block" initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 1, ease: [0.16,1,0.3,1], delay: 0.25 }}>mean <span style={{ color: ACCENT }}>something.</span></motion.span></span>
-          </h1>
-          <Reveal delay={0.35}>
-            <p className={`${display.className} mt-10 max-w-xl text-base md:text-lg leading-relaxed`} style={{ color: "rgba(230,228,226,0.72)" }}>
-              I&apos;m Aarya, a final-year B.Tech (AI/ML) student who builds LLM systems that run in production and secures them. RAG, multi-agent automation, Postgres row-level security, security audits. Currently an AI Engineering Intern at <span style={{ color: PAPER }} className="font-medium">OyeLabs</span>; graduating May 2027.
-            </p>
-          </Reveal>
-          <Reveal delay={0.45}><div className="mt-9"><Blast /></div></Reveal>
-          <Reveal delay={0.55}>
-            <div className="mt-7 flex flex-wrap items-center gap-3">
-              <Magnetic><a href="#work" data-cursor className={`${mono.className} text-xs uppercase tracking-wider px-6 py-3.5 rounded-full transition-all duration-300 hover:opacity-90`} style={{ background: ACCENT, color: "#040508" }}>See the work →</a></Magnetic>
-              <Magnetic><a href="/Aarya_Resume.pdf" download data-cursor className={`${mono.className} text-xs uppercase tracking-wider px-6 py-3.5 rounded-full transition-all duration-300`} style={{ border: `1px solid ${PAPER}`, color: PAPER }}>Résumé ↓</a></Magnetic>
-            </div>
-          </Reveal>
+      {/* hero */}
+      <section id="top" ref={hero} className="relative min-h-screen overflow-hidden flex flex-col justify-between px-5 md:px-10 pt-24 pb-8">
+        <motion.div aria-hidden style={{ y: glowY }} className="absolute inset-0">
+          <div className="absolute -top-1/4 -right-1/4 w-[80vw] h-[80vw] rounded-full blur-3xl opacity-50" style={{ background: `radial-gradient(circle, ${GREEN}, transparent 65%)` }} />
+          <div className="absolute -bottom-1/3 -left-1/4 w-[60vw] h-[60vw] rounded-full blur-3xl opacity-40" style={{ background: `radial-gradient(circle, ${RED}, transparent 65%)` }} />
         </motion.div>
-        <div className="relative overflow-hidden border-t pt-4" style={{ borderColor: LINE }}>
-          <div className={`${mono.className} flex gap-8 whitespace-nowrap animate-marquee text-xs uppercase tracking-[0.15em]`} style={{ color: MUTED }}>
-            {[...Array(2)].flatMap((_, k) => ["LangChain","n8n","FAISS","Claude","Gemini","LangGraph","Pinecone","RAG","FastAPI","Supabase","Amazon Bedrock","Groq LLaMA"].map((t) => (
-              <span key={`${k}-${t}`} className="flex items-center gap-8">{t} <span style={{ color: ACCENT }}>✦</span></span>
-            )))}
+
+        {/* portrait, framed like a camera viewfinder */}
+        <motion.figure
+          style={{ y: glowY, opacity: fade }}
+          initial={{ opacity: 0, scale: 1.04 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+          className="hidden md:block absolute right-[4vw] top-[11vh] w-[min(56vh,33vw)] aspect-[9/14] z-0"
+        >
+          <img src="/aarya.jpg" alt="Aarya Vaidya" className="w-full h-full object-cover object-top" style={{ filter: "grayscale(0.35) contrast(1.05)" }} />
+          <div aria-hidden className="absolute inset-0" style={{ background: `linear-gradient(to top, ${BG}cc, transparent 45%), linear-gradient(120deg, ${GREEN}55, transparent 60%)` }} />
+          {[["top-2 left-2", "border-t border-l"], ["top-2 right-2", "border-t border-r"], ["bottom-2 left-2", "border-b border-l"], ["bottom-2 right-2", "border-b border-r"]].map(([pos, b]) => (
+            <span key={pos} className={`absolute w-4 h-4 ${pos} ${b}`} style={{ borderColor: INK }} />
+          ))}
+          <figcaption className={`${mono.className} absolute -bottom-6 left-0 text-[10px] uppercase tracking-[0.14em]`} style={{ color: MUTED }}>FIG. 01 · AARYA VAIDYA, ON SET</figcaption>
+        </motion.figure>
+
+        <motion.div style={{ opacity: fade }} className="relative flex justify-between">
+          <div className="space-y-1">
+            <Label>PUNE, IN · OPEN TO RELOCATE ANYWHERE</Label><br />
+            <Label>AI ENGINEERING · SECURITY · AGENTS</Label>
           </div>
+        </motion.div>
+
+        <motion.div style={{ y: titleY, opacity: fade }} className="relative md:w-[60%]">
+          <h1 className="font-bold uppercase leading-[0.86] tracking-[-0.03em] text-[clamp(3rem,15vw,5rem)] md:text-[clamp(2.4rem,7vw,9rem)]">
+            Production AI,<br />
+            built <span style={{ color: RED }}>&amp;</span> secured.
+          </h1>
+          <p className="mt-8 max-w-xl text-base md:text-lg leading-relaxed" style={{ color: "rgba(236,232,223,0.72)" }}>
+            I am Aarya, a final-year B.Tech (AI/ML) student and AI Engineering Intern at OyeLabs.
+            I build LLM systems that run in production, and I audit them before someone else does.
+            Graduating May 2027.
+          </p>
+          <div className="flex flex-wrap gap-3 mt-8">
+            <a href="#works" data-cursor="View" className={`${mono.className} text-xs uppercase tracking-[0.14em] px-6 py-3.5`} style={{ background: INK, color: BG }}>View the work ↗</a>
+            <a href={`mailto:${EMAIL}`} data-cursor="Mail" className={`${mono.className} text-xs uppercase tracking-[0.14em] px-6 py-3.5 border`} style={{ borderColor: INK }}>Start a conversation</a>
+            <a href="/Aarya_Resume.pdf" download data-cursor="PDF" className={`${mono.className} text-xs uppercase tracking-[0.14em] px-6 py-3.5 border`} style={{ borderColor: LINE, color: MUTED }}>Resume</a>
+          </div>
+        </motion.div>
+
+        <motion.div style={{ opacity: fade }} className="relative flex items-end justify-between">
+          <Label>TC <Timecode /></Label>
+          <Label>SCROLL TO ENTER ↓</Label>
+          <Label className="hidden sm:block">MODEL: CLAUDE / GROQ / BEDROCK · 24 FPS</Label>
+        </motion.div>
+      </section>
+
+      {/* marquee */}
+      <section className="border-y overflow-hidden py-5" style={{ borderColor: LINE }}>
+        <motion.div
+          className={`${sans.className} flex w-max gap-10 text-3xl md:text-5xl font-bold uppercase whitespace-nowrap`}
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ duration: 60, ease: "linear", repeat: Infinity }}
+        >
+          {[...tape, ...tape].map((t, i) => (
+            <span key={i} className="flex items-center gap-10">
+              <span style={{ color: i % 3 === 0 ? RED : INK, opacity: i % 3 === 0 ? 1 : 0.85 }}>{t}</span>
+              <span style={{ color: MUTED }}>+</span>
+            </span>
+          ))}
+        </motion.div>
+      </section>
+
+      {/* numbers */}
+      <section className="px-5 md:px-10 py-20 md:py-28">
+        <Seq n="01" title="BY THE NUMBERS" right="MEASURED, NOT CLAIMED" />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-6">
+          {[
+            { n: 17, s: "x", l: "Faster financial answers", d: "1,950ms to 115ms in Jenna" },
+            { n: 185, s: "", l: "Findings in a security audit", d: "4 verified as fail-first tests" },
+            { n: 19, s: "", l: "Live n8n workflows", d: "RAG, agents, WhatsApp, voice" },
+            { n: 93, s: "%", l: "Auth latency cut", d: "15ms to under 1ms in DreamHome" },
+          ].map((s, i) => (
+            <Reveal key={s.l} delay={i * 0.08}>
+              <div className="text-[clamp(3.5rem,9vw,8rem)] font-bold leading-none tracking-[-0.04em]"><Counter to={s.n} suffix={s.s} /></div>
+              <div className="mt-3 text-sm font-medium">{s.l}</div>
+              <Label>{s.d}</Label>
+            </Reveal>
+          ))}
         </div>
       </section>
 
-      {/* ABOUT */}
-      <section id="about" className="px-6 md:px-10 py-24 md:py-32 max-w-[1400px] mx-auto">
-        <div className="flex items-baseline justify-between mb-12">
-          <Reveal><h2 style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", fontWeight: 500, fontSize: "clamp(2.5rem,6.283vw,5.938rem)", lineHeight: 0.9, letterSpacing: "-0.03em" }}>About</h2></Reveal>
-          <span className={`${mono.className} text-xs uppercase tracking-wider`} style={{ color: MUTED }}>From idea to outcome</span>
+      <Filmstrip />
+
+      {/* stack */}
+      <section id="stack" className="px-5 md:px-10 py-24 md:py-32">
+        <Seq n="03" title="CORE / FOCUS" right="TOOLS OF THE TRADE" />
+        <div className="grid md:grid-cols-2 gap-x-16">
+          {stack.map((g, i) => (
+            <Reveal key={g.group} delay={(i % 2) * 0.08}>
+              <div className="border-t py-6" style={{ borderColor: LINE }}>
+                <div className="flex gap-4 items-baseline mb-4">
+                  <Label>{String(i + 1).padStart(2, "0")}</Label>
+                  <h3 className="text-2xl md:text-3xl font-bold uppercase">{g.group}</h3>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {g.items.map((s) => (
+                    <span key={s} className={`${mono.className} text-[11px] px-2.5 py-1.5 border uppercase`} style={{ borderColor: LINE, color: "rgba(236,232,223,0.78)" }}>{s}</span>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
+          ))}
         </div>
-        <div className="grid lg:grid-cols-[1.4fr_1fr] gap-16">
-          <Reveal>
-            <p style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", fontWeight: 400, fontSize: "clamp(1.5rem,3.4vw,2.75rem)", lineHeight: 1.1, letterSpacing: "-0.02em" }}>
-              I&apos;m an AI/ML engineer crafting production-grade systems through strategy, models, and code, with a security mindset.
-              <span style={{ color: ACCENT }}> Clarity first, craft always,</span> built to scale.
+      </section>
+
+      {/* about */}
+      <section id="about" className="px-5 md:px-10 py-24 md:py-32">
+        <Seq n="04" title="THE STUDIO" right="PUNE, IN · 18.52N 73.85E" />
+        <div className="grid md:grid-cols-12 gap-10">
+          <Reveal className="md:col-span-7">
+            <p className="text-[clamp(1.6rem,3.4vw,3rem)] font-medium leading-[1.12] tracking-[-0.02em]">
+              I turn messy ideas into systems that survive <span style={{ color: RED }}>real users</span>: grounded RAG,
+              multi-agent automation, Postgres row-level security and security audits.
             </p>
-            <p className={`${display.className} mt-8 text-base leading-relaxed max-w-xl`} style={{ color: "rgba(230,228,226,0.7)" }}>
-              My aim is to make AI feel dependable: systems that are intuitive, purposeful, and safe for the people who ship with them. I&apos;m looking for internships and graduate AI/ML or security roles, especially in Australia. Available remotely now and full-time from mid-2027, open to relocation and visa sponsorship.
+            <p className="mt-8 max-w-xl leading-relaxed" style={{ color: "rgba(236,232,223,0.7)" }}>
+              I am looking for internships and graduate AI/ML or security roles, anywhere in the world.
+              Available remotely now and full-time from mid-2027, open to relocation and visa sponsorship.
             </p>
           </Reveal>
-          <div>
-            {journey.map((j, i) => (
-              <Reveal key={j.year} delay={i * 0.06}>
-                <div className="flex gap-5 py-5 border-b" style={{ borderColor: LINE }}>
-                  <span className={`${mono.className} text-sm pt-1`} style={{ color: ACCENT }}>{j.year}</span>
-                  <div>
-                    <div className={`${display.className} font-medium`}>{j.role}</div>
-                    <div className={`${display.className} text-sm`} style={{ color: "rgba(230,228,226,0.6)" }}>{j.org}</div>
-                    <div className={`${mono.className} text-[11px] mt-1`} style={{ color: "rgba(230,228,226,0.4)" }}>{j.note}</div>
-                  </div>
+          <div className="md:col-span-5">
+            <Reveal className="relative mb-10 aspect-[4/5] overflow-hidden">
+              <img src="/aarya.jpg" alt="Aarya Vaidya" className="w-full h-full object-cover object-top" style={{ filter: "grayscale(0.35) contrast(1.05)" }} />
+              <div aria-hidden className="absolute inset-0" style={{ background: `linear-gradient(to top, ${BG}aa, transparent 50%)` }} />
+              <span className={`${mono.className} absolute bottom-3 left-3 text-[10px] uppercase tracking-[0.14em]`}>FIG. 01 · AARYA VAIDYA, AI ENGINEER</span>
+            </Reveal>
+            <Label>CALL SHEET</Label>
+            {journey.map((j) => (
+              <Reveal key={j.org + j.year}>
+                <div className="border-t py-5 mt-3" style={{ borderColor: LINE }}>
+                  <div className="flex justify-between"><span className="font-medium">{j.role}</span><Label>{j.year}</Label></div>
+                  <div className="text-sm mt-1" style={{ color: MUTED }}>{j.org}</div>
+                  <div className="text-sm mt-1" style={{ color: "rgba(236,232,223,0.6)" }}>{j.note}</div>
                 </div>
               </Reveal>
             ))}
           </div>
         </div>
-
-        {/* KEY FACTS — serif numbers (Trionn .numbers) */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20 pt-12 border-t" style={{ borderColor: LINE }}>
-          {facts.map((s, i) => (
-            <Reveal key={s.label} delay={i * 0.08}>
-              <div className={`${serif.className}`} style={{ fontSize: "clamp(3.5rem,6.349vw,6rem)", lineHeight: 0.9, color: PAPER }}>
-                <Counter value={s.n} suffix={s.suffix} />
-              </div>
-              <div className={`${mono.className} text-[11px] uppercase tracking-wider mt-2`} style={{ color: MUTED }}>{s.label}</div>
-            </Reveal>
-          ))}
-        </div>
       </section>
 
-      {/* SELECTED WORK */}
-      <section id="work" className="px-6 md:px-10 py-24 md:py-32 max-w-[1400px] mx-auto">
-        <Reveal>
-          <div className="flex items-baseline justify-between mb-12 md:mb-16">
-            <h2 style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", fontWeight: 500, fontSize: "clamp(2.5rem,6.283vw,5.938rem)", lineHeight: 0.9, letterSpacing: "-0.03em" }}>Selected work &amp; explorations</h2>
-            <span className={`${mono.className} text-xs uppercase tracking-wider`} style={{ color: MUTED }}>Projects</span>
-          </div>
-        </Reveal>
+      {/* credits / certs */}
+      <section className="px-5 md:px-10 py-24 md:py-32">
+        <Seq n="05" title="SELECTED CREDITS" right={`${certs.length} VERIFIED`} />
         <div>
-          {work.map((item) => <WorkCard key={item.no} item={item} />)}
-          <div className="border-t" style={{ borderColor: LINE }} />
+          {certs.map((c) => {
+            const Tag = c.href ? "a" : "div";
+            return (
+              <Tag
+                key={c.name}
+                {...(c.href ? { href: c.href, target: "_blank", rel: "noopener noreferrer", "data-cursor": "Verify" } : {})}
+                className="group grid grid-cols-12 gap-4 items-baseline border-t py-4 md:py-5 transition-colors hover:bg-white/[0.03]"
+                style={{ borderColor: LINE }}
+              >
+                <Label className="col-span-2 md:col-span-1">{c.year}</Label>
+                <span className="col-span-10 md:col-span-7 font-medium group-hover:translate-x-2 transition-transform duration-300">{c.name}</span>
+                <span className="col-span-12 md:col-span-3 text-sm" style={{ color: MUTED }}>{c.org}</span>
+                <span className="hidden md:block col-span-1 text-right" style={{ color: c.href ? RED : MUTED }}>{c.href ? "↗" : ""}</span>
+              </Tag>
+            );
+          })}
+          <div className="border-t pt-5 text-sm" style={{ borderColor: LINE, color: MUTED }}>{moreCerts}</div>
         </div>
-        <Reveal>
-          <a href="https://github.com/rajaaryan779" target="_blank" rel="noopener noreferrer" data-cursor
-            className={`${mono.className} inline-flex items-center gap-2 mt-10 text-xs uppercase tracking-wider hover:gap-3 transition-all`} style={{ color: ACCENT }}>
-            Discover the complete collection ↗
+      </section>
+
+      {/* contact */}
+      <section id="contact" className="relative px-5 md:px-10 pt-24 pb-10 overflow-hidden">
+        <div aria-hidden className="absolute inset-x-0 bottom-0 h-2/3" style={{ background: `radial-gradient(70% 100% at 50% 100%, ${GREEN}66, transparent)` }} />
+        <div className="relative">
+          <Seq n="06" title="LET'S ROLL" right="NOW BOOKING · REMOTE NOW, FULL-TIME FROM MID-2027" />
+          <a href={`mailto:${EMAIL}`} data-cursor="Mail" className="block font-bold uppercase leading-[0.86] tracking-[-0.03em] text-[clamp(3rem,12vw,12rem)] hover:opacity-80 transition-opacity">
+            Let&apos;s <span style={{ color: RED }}>roll</span> ↗
           </a>
-        </Reveal>
-      </section>
+          <p className="mt-6" style={{ color: "rgba(236,232,223,0.72)" }}>
+            Building something hard in AI or security? I would like to be on the crew.
+          </p>
 
-      {/* SERVICES */}
-      <section id="services" className="px-6 md:px-10 py-24 md:py-32" style={{ background: SURFACE }}>
-        <div className="max-w-[1400px] mx-auto">
-          <Reveal>
-            <div className={`${mono.className} text-xs uppercase tracking-wider mb-3`} style={{ color: ACCENT }}>Our services</div>
-            <h2 style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", fontWeight: 500, fontSize: "clamp(2.5rem,6.614vw,6.25rem)", lineHeight: 0.9, letterSpacing: "-0.03em" }}>
-              Design with intent.<br/>Built to work.
-            </h2>
-          </Reveal>
-          <div className="grid md:grid-cols-2 gap-x-16 mt-16">
-            {serviceGroups.map((g, gi) => (
-              <div key={g.key}>
-                <Reveal><div className={`${mono.className} text-xs uppercase tracking-wider mb-6`} style={{ color: ACCENT }}>{g.key}</div></Reveal>
-                <div className="divide-y" style={{ borderColor: LINE }}>
-                  {g.items.map((it, i) => (
-                    <Reveal key={it[0]} delay={i * 0.04}>
-                      <div className="py-7 border-t" style={{ borderColor: LINE }}>
-                        <h3 style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", fontWeight: 500, fontSize: "clamp(22px,3vw,34px)", letterSpacing: "-0.02em" }}>{it[0]}</h3>
-                        <p className={`${display.className} mt-3 text-sm md:text-base leading-relaxed`} style={{ color: "rgba(230,228,226,0.7)" }}>{it[1]}</p>
-                      </div>
-                    </Reveal>
-                  ))}
-                </div>
-              </div>
-            ))}
+          <footer className={`${mono.className} mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 text-xs uppercase tracking-[0.12em]`}>
+            <div><Label>(00) Studio</Label><p className="mt-2 leading-relaxed" style={{ color: "rgba(236,232,223,0.7)" }}>Aarya Vaidya, AI/ML engineer. Production AI, built and secured.</p></div>
+            <div><Label>(N) Index</Label>
+              <ul className="mt-2 space-y-1">{["works", "stack", "about", "contact"].map((l) => <li key={l}><a href={`#${l}`} className="hover:text-white">{l}</a></li>)}</ul>
+            </div>
+            <div><Label>(L) Location</Label><p className="mt-2">Pune, India<br /><Clock /></p></div>
+            <div><Label>(S) Elsewhere</Label>
+              <ul className="mt-2 space-y-1">
+                <li><a href="https://github.com/rajaaryan779" target="_blank" rel="noopener noreferrer">GitHub ↗</a></li>
+                <li><a href="https://linkedin.com/in/aarya-vaidya-013227211" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a></li>
+                <li><a href={`mailto:${EMAIL}`}>Email ↗</a></li>
+              </ul>
+            </div>
+          </footer>
+          <div className={`${mono.className} mt-10 flex justify-between text-[11px] uppercase tracking-[0.14em]`} style={{ color: MUTED }}>
+            <span>© 2026 Aarya Vaidya</span>
+            <a href="#top">Back to top ↑</a>
           </div>
         </div>
       </section>
-
-      {/* CLIENT STORIES */}
-      <section className="px-6 md:px-10 py-24 md:py-32 max-w-[1400px] mx-auto">
-        <Reveal>
-          <div className="flex items-baseline justify-between mb-14">
-            <h2 style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", fontWeight: 500, fontSize: "clamp(2.5rem,6.283vw,5.938rem)", lineHeight: 0.9, letterSpacing: "-0.03em" }}>Client stories</h2>
-            <span className={`${mono.className} text-xs uppercase tracking-wider`} style={{ color: MUTED }}>Great work is built through partnership</span>
-          </div>
-        </Reveal>
-        <div className="grid md:grid-cols-2 gap-px" style={{ background: LINE }}>
-          {clients.map((c, i) => (
-            <Reveal key={i} delay={i * 0.05}>
-              <div className="p-8 h-full flex flex-col justify-between gap-6" style={{ background: BG }}>
-                <p style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", fontWeight: 400, fontSize: "clamp(1.25rem,2.4vw,1.875rem)", lineHeight: 1.2, letterSpacing: "-0.01em" }}>“{c.quote}”</p>
-                <div className={`${mono.className} text-[11px] uppercase tracking-wider`} style={{ color: MUTED }}>{c.name} · {c.org}</div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* DESIGN IN MOTION */}
-      <section className="px-6 md:px-10 py-24 md:py-32" style={{ background: SURFACE }}>
-        <div className="max-w-[1400px] mx-auto">
-          <Reveal>
-            <div className={`${mono.className} text-xs uppercase tracking-wider mb-6`} style={{ color: ACCENT }}>Design in motion</div>
-            <h2 style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", fontWeight: 500, fontSize: "clamp(2.5rem,6.614vw,6.25rem)", lineHeight: 0.9, letterSpacing: "-0.03em" }}>
-              Exploring ideas through<br/>daily design practice.
-            </h2>
-            <p className={`${display.className} mt-6 max-w-xl text-base leading-relaxed`} style={{ color: "rgba(230,228,226,0.7)" }}>
-              Concepts, experiments, and interface motion shared openly as part of the build process — the same craft behind every production system.
-            </p>
-            <a href="https://github.com/rajaaryan779" target="_blank" rel="noopener noreferrer" data-cursor
-              className={`${mono.className} inline-flex items-center gap-2 mt-8 text-xs uppercase tracking-wider`} style={{ color: ACCENT }}>View on GitHub ↗</a>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* CONTACT */}
-      <section id="contact" className="px-6 md:px-10 py-24 md:py-36" style={{ background: ACCENT, color: "#040508" }}>
-        <div className="max-w-[1400px] mx-auto">
-          <span className={`${mono.className} text-xs uppercase tracking-wider`}>Contact</span>
-          <Reveal><h2 style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", fontWeight: 500, fontSize: "clamp(48px,12vw,180px)", lineHeight: 0.9, letterSpacing: "-0.03em" }}>Let&apos;s talk.</h2></Reveal>
-          <Reveal delay={0.1}>
-            <a href="mailto:aaryasharadvaidya.10@gmail.com" data-cursor
-              className={`${display.className} inline-block mt-8 text-xl md:text-3xl font-medium underline underline-offset-8 decoration-2 hover:opacity-70 transition-opacity`}>
-              aaryasharadvaidya.10@gmail.com
-            </a>
-          </Reveal>
-          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 mt-20 pt-10 border-t" style={{ borderColor: "rgba(4,5,8,0.25)" }}>
-            {[
-              { l: "LinkedIn", v: "aarya-vaidya", h: "https://linkedin.com/in/aarya-vaidya-013227211" },
-              { l: "GitHub",   v: "rajaaryan779", h: "https://github.com/rajaaryan779" },
-              { l: "Location", v: "Pune, India",  h: "#" },
-              { l: "Phone",    v: "+91 81499 04590", h: "tel:+918149904590" },
-            ].map((s) => (
-              <a key={s.l} href={s.h} target={s.h.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer" data-cursor className="group">
-                <div className={`${mono.className} text-[11px] uppercase tracking-wider mb-1`} style={{ color: "rgba(4,5,8,0.6)" }}>{s.l}</div>
-                <div className={`${display.className} font-medium flex items-center gap-1.5 group-hover:gap-2.5 transition-all`}>{s.v} <span>↗</span></div>
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <footer className="px-6 md:px-10 py-10" style={{ background: BG, color: "rgba(230,228,226,0.5)" }}>
-        <div className={`${mono.className} max-w-[1400px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] uppercase tracking-wider`}>
-          <span>© 2026 Aarya Vaidya</span>
-          <span>Pune, India</span>
-          <span>Built with Next.js · Framer Motion</span>
-        </div>
-      </footer>
     </main>
   );
 }
